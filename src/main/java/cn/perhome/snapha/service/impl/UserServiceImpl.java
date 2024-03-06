@@ -1,5 +1,6 @@
 package cn.perhome.snapha.service.impl;
 
+import cn.perhome.snapha.config.constant.SnaphaConstant;
 import cn.perhome.snapha.dto.ResponseResultDto;
 import cn.perhome.snapha.dto.form.FormLoginDto;
 import cn.perhome.snapha.dto.form.FormRegisterDto;
@@ -35,15 +36,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
     private final HttpServletRequest    request;
     private final JwtService            jwtService;
     private final AuthenticationService authenticationService;
+    private final SnaphaConstant        snaphaConstant;
 
-    @Value("${snapha.user.password.suffix-key}")
-    private String suffixKey;
-
-    public UserServiceImpl(UserMapper userMapper, HttpServletRequest request, JwtService jwtService, AuthenticationService authenticationService) {
+    public UserServiceImpl(UserMapper userMapper, HttpServletRequest request, JwtService jwtService, AuthenticationService authenticationService, SnaphaConstant snaphaConstant) {
         this.userMapper = userMapper;
         this.request = request;
         this.jwtService = jwtService;
         this.authenticationService = authenticationService;
+        this.snaphaConstant = snaphaConstant;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -51,13 +51,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
         String ip = this.request.getRemoteAddr();
         String passport = formRegisterDto.getPassport();
         String password = formRegisterDto.getPassword();
-        String hexPassword = DigestUtils.md5DigestAsHex(
-                password.concat(this.suffixKey).getBytes(StandardCharsets.UTF_8));
-
         UserEntity userEntity = new UserEntity();
         userEntity.setName(passport);
         userEntity.setUsn(passport);
-        userEntity.setPassword(hexPassword);
+        userEntity.setPassword(password);
         userEntity.setLastLogin(DateUtils.getNowDate());
         userEntity.setLastLoginIp(ip);
         int result = this.userMapper.insertSelective(userEntity);
@@ -77,7 +74,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
         }
 
         String hexPassword = DigestUtils.md5DigestAsHex(
-                password.concat(this.suffixKey).getBytes(StandardCharsets.UTF_8));
+                password.concat(snaphaConstant.getPasswordSuffixKey()).getBytes(StandardCharsets.UTF_8));
 
         if (userEntity.getPassword() == null || !userEntity.getPassword().equals(hexPassword)) {
             responseResultDto = ResponseResultDto.failed(HttpStatus.FORBIDDEN.value(),"用户密码错误", formLoginDto);

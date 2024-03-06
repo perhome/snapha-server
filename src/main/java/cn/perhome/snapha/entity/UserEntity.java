@@ -1,7 +1,9 @@
 package cn.perhome.snapha.entity;
 
 
+import cn.perhome.snapha.component.MyUserInsertListener;
 import cn.perhome.snapha.security.Role;
+import cn.perhome.snapha.utils.SpringContextUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mybatisflex.annotation.Id;
@@ -13,7 +15,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@Table("user")
+@Table(value = "user")
 public class UserEntity implements Serializable {
     @Id
     private Long           uid;

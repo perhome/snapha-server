@@ -37,9 +37,6 @@ public class UserController {
     private final UserMapper      userMapper;
     private final UserServiceImpl userServiceImpl;
 
-    @Value("${snapha.user.password.suffix-key}")
-    private String suffixKey;
-
     @Operation(summary = "注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=utf-8;")
     @ResponseBody

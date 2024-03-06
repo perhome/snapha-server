@@ -2,6 +2,8 @@ package cn.perhome.snapha.config;
 
 
 
+import cn.perhome.snapha.component.MyUserInsertListener;
+import cn.perhome.snapha.entity.UserEntity;
 import com.mybatisflex.core.FlexGlobalConfig;
 import com.mybatisflex.spring.boot.MyBatisFlexCustomizer;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -15,8 +17,15 @@ import javax.sql.DataSource;
 @Configuration
 public class MyBatisFlexConfig implements MyBatisFlexCustomizer {
 
+    private final MyUserInsertListener myUserInsertListener;
+
+    public MyBatisFlexConfig(MyUserInsertListener myUserInsertListener) {
+        this.myUserInsertListener = myUserInsertListener;
+    }
+
     @Override
     public void customize(FlexGlobalConfig globalConfig) {
-        //我们可以在这里进行一些列的初始化配置
+        globalConfig.registerUpdateListener(myUserInsertListener, UserEntity.class);
+        globalConfig.registerInsertListener(myUserInsertListener, UserEntity.class);
     }
 }
