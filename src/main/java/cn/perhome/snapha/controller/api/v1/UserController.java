@@ -3,6 +3,7 @@ package cn.perhome.snapha.controller.api.v1;
 import cn.perhome.snapha.dto.QueryDto;
 import cn.perhome.snapha.dto.ResponseResultDto;
 
+import cn.perhome.snapha.dto.form.FormUserDto;
 import cn.perhome.snapha.dto.query.QueryCommonDto;
 import cn.perhome.snapha.entity.UserEntity;
 import cn.perhome.snapha.mapper.UserMapper;
@@ -21,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import cn.perhome.snapha.security.JwtService;
@@ -28,7 +30,7 @@ import java.util.*;
 
 import static cn.perhome.snapha.entity.table.UserEntityTableDef.USER_ENTITY;
 
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 @Tag(name = "用户管理")
 @Slf4j
 @RestController
@@ -76,10 +78,16 @@ public class UserController {
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @RequestMapping(value = "{userId}", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> updateInfoById(@PathVariable Long userId) {
+    public ResponseEntity<ResponseResultDto> updateInfoById(@PathVariable Long userId
+            , @RequestBody FormUserDto form) {
         UserEntity wrapper = UpdateEntity.of(UserEntity.class, userId);
+        wrapper.setUsn(form.getUsn());
+        wrapper.setName(form.getName());
+        wrapper.setJobId(form.getJobId());
+        wrapper.setDepartmentId(form.getDepartmentId());
         int ret = this.userMapper.update(wrapper);
         ResponseResultDto responseResultDto = ResponseResultDto.success(ret);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);

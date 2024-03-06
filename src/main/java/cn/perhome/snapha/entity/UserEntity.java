@@ -34,12 +34,12 @@ public class UserEntity implements Serializable {
     private String         password;
     private Integer        status;
     private Integer        deleted;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private java.util.Date workStartDate;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private  java.util.Date lastLogin;
     private String lastLoginIp;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private java.util.Date created;
     private Boolean        isActive;
 
