@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.perhome.snapha.mapper.UnitMapper">
+
+    <insert id="save" parameterType="cn.perhome.snapha.entity.UnitEntity">
+        INSERT INTO "unit"
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test='uid!=null'>uid,</if>
+            <if test='name!=null'>name,</if>
+            <if test='weight!=null'>weight,</if>
+            <if test='status!=null'>status,</if>
+            <if test='usn!=null'>usn,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test='uid!=null'>#{uid},</if>
+            <if test='name!=null'>#{name},</if>
+            <if test='weight!=null'>#{weight},</if>
+            <if test='status!=null'>#{status},</if>
+            <if test='usn!=null'>#{usn},</if>
+        </trim>
+        ON CONFLICT(uid) DO UPDATE
+        <set>
+            <if test='uid!=null'>uid=#{uid},</if>
+            <if test='name!=null'>name=#{name},</if>
+            <if test='weight!=null'>weight=#{weight},</if>
+            <if test='status!=null'>status=#{status},</if>
+            <if test='usn!=null'>usn=#{usn},</if>
+        </set>
+    </insert>
+
+</mapper>

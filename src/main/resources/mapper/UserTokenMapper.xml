@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.perhome.snapha.mapper.UserTokenMapper">
+
+    <select id="findByToken" resultType="cn.perhome.snapha.model.UserToken" parameterType="java.lang.String">
+        SELECT t1.*
+        FROM "user_token" t1
+        <where>
+            t1.token = #{token}
+        </where>
+        LIMIT 1
+    </select>
+
+    <select id="findAllValidTokenByUser" resultType="cn.perhome.snapha.model.UserToken">
+        SELECT t1.*
+        FROM "user_token" t1
+        <where>
+            t1.user_id = #{userId} AND  expired = false AND revoked = false
+        </where>
+    </select>
+
+    <update id="saveAll" parameterType="cn.perhome.snapha.model.UserToken">
+        UPDATE "user_token"
+        SET expired = true, revoked = true
+        WHERE id IN <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+        #{item.id}
+    </foreach>
+    </update>
+
+</mapper>

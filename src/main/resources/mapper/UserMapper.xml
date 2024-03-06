@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.perhome.snapha.mapper.UserMapper">
+
+    <select id="getListByPageHelper" resultType="cn.perhome.snapha.entity.UserEntity">
+        SELECT * FROM "user"
+    </select>
+
+    <select id="getListByXml" resultType="cn.perhome.snapha.entity.UserEntity">
+        SELECT *
+            FROM "user" ${qwSql} limit ${pageSize} offset ${pageOffset}
+    </select>
+
+    <select id="getListByXml_COUNT" resultType="long">
+        SELECT count(*) FROM "user" ${qwSql}
+    </select>
+
+
+    <select id="getByPassport" resultType="cn.perhome.snapha.entity.UserEntity">
+        SELECT t1.*
+        FROM "user" t1
+        <where>
+            t1.usn = #{passport}
+        </where>
+        LIMIT 1
+    </select>
+</mapper>
