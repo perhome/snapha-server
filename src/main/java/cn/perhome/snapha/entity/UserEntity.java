@@ -1,11 +1,11 @@
 package cn.perhome.snapha.entity;
 
 
-import cn.perhome.snapha.component.MyUserInsertListener;
-import cn.perhome.snapha.security.Role;
-import cn.perhome.snapha.utils.SpringContextUtils;
+
+import cn.perhome.snapha.utils.postgres.ArrayTypeHandler;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import jakarta.persistence.EnumType;
@@ -13,8 +13,6 @@ import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @Table(value = "user")
@@ -33,6 +31,7 @@ public class UserEntity implements Serializable {
     private Integer        groupId;
     private String         jobType;
     private String    sex;
+    @Column(typeHandler = ArrayTypeHandler.class)
     private String[] roles;
     @JsonIgnore
     private String    password;

@@ -57,6 +57,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
         userEntity.setPassword(password);
         userEntity.setLastLogin(DateUtils.getNowDate());
         userEntity.setLastLoginIp(ip);
+        userEntity.setRoles(new String[]{"USER"});
         int result = this.userMapper.insertSelective(userEntity);
         return ResponseResultDto.success(result);
     }
