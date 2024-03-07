@@ -14,7 +14,7 @@ import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 
-@Configuration
+@Component
 @RequiredArgsConstructor
 public class MyUserInsertListener implements InsertListener, UpdateListener {
 
@@ -38,7 +38,7 @@ public class MyUserInsertListener implements InsertListener, UpdateListener {
         }
     }
 
-    private String getHashPassword(String password) {
+    public String getHashPassword(String password) {
         String suffixKey = snaphaConstant.getPasswordSuffixKey();
         password = password.concat(suffixKey);
         return DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));

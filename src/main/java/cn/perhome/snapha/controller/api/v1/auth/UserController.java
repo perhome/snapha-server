@@ -35,7 +35,8 @@ public class UserController {
 
     private final AuthenticationService authenticationService;
     private final UserMapper      userMapper;
-    private final UserServiceImpl userServiceImpl;
+    private final UserServiceImpl      userServiceImpl;
+
 
     @Operation(summary = "注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json;charset=utf-8;")

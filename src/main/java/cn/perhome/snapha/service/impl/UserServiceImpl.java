@@ -1,5 +1,6 @@
 package cn.perhome.snapha.service.impl;
 
+import cn.perhome.snapha.component.MyUserInsertListener;
 import cn.perhome.snapha.config.constant.SnaphaConstant;
 import cn.perhome.snapha.dto.ResponseResultDto;
 import cn.perhome.snapha.dto.form.FormLoginDto;
@@ -16,6 +17,7 @@ import cn.perhome.snapha.utils.DateUtils;
 import com.mybatisflex.core.util.UpdateEntity;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
         implements UserService {
 
@@ -36,15 +39,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
     private final HttpServletRequest    request;
     private final JwtService            jwtService;
     private final AuthenticationService authenticationService;
-    private final SnaphaConstant        snaphaConstant;
+    private final SnaphaConstant       snaphaConstant;
+    private final MyUserInsertListener myUserInsertListener;
 
-    public UserServiceImpl(UserMapper userMapper, HttpServletRequest request, JwtService jwtService, AuthenticationService authenticationService, SnaphaConstant snaphaConstant) {
-        this.userMapper = userMapper;
-        this.request = request;
-        this.jwtService = jwtService;
-        this.authenticationService = authenticationService;
-        this.snaphaConstant = snaphaConstant;
-    }
 
     @Transactional(rollbackFor = Exception.class)
     public ResponseResultDto register(FormRegisterDto formRegisterDto) {
@@ -68,16 +65,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
         String password = formLoginDto.getPassword();
 
         UserEntity userEntity = this.userMapper.getByPassport(passport);
-        if (userEntity == null) {
-            responseResultDto = ResponseResultDto.failed(HttpStatus.FORBIDDEN.value(),"用户登陆账户不存在", formLoginDto);
+        if (userEntity == null || userEntity.getPassword() == null) {
+            responseResultDto
+                    = ResponseResultDto.failed(HttpStatus.FORBIDDEN.value(),"用户登陆账户不存在", formLoginDto);
             return responseResultDto;
         }
 
-        String hexPassword = DigestUtils.md5DigestAsHex(
-                password.concat(snaphaConstant.getPasswordSuffixKey()).getBytes(StandardCharsets.UTF_8));
-
-        if (userEntity.getPassword() == null || !userEntity.getPassword().equals(hexPassword)) {
-            responseResultDto = ResponseResultDto.failed(HttpStatus.FORBIDDEN.value(),"用户密码错误", formLoginDto);
+        String hexPassword = this.myUserInsertListener.getHashPassword(password);
+        if (!userEntity.getPassword().equals(hexPassword)) {
+            responseResultDto
+                    = ResponseResultDto.failed(HttpStatus.FORBIDDEN.value(),"用户密码错误", formLoginDto);
             return responseResultDto;
         }
 
