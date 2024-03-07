@@ -30,7 +30,7 @@ import java.util.*;
 
 import static cn.perhome.snapha.entity.table.UserEntityTableDef.USER_ENTITY;
 
-@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+@PreAuthorize("hasAnyRole('ADMIN')")
 @Tag(name = "用户管理")
 @Slf4j
 @RestController

@@ -1,9 +1,9 @@
 package cn.perhome.snapha.entity;
 
-
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -12,9 +12,10 @@ import java.io.Serializable;
 public class UnitEntity implements Serializable {
     @Id
     private Long uid;
-    private String usn;
     private String name;
-    private Integer weight;
+    private Long weight;
     private Integer status;
-
+    private String nameAbbr;
+    private Integer deleted;
+    private String nameSn;
 }
