@@ -1,13 +1,16 @@
 package cn.perhome.snapha.utils;
 
 import cn.perhome.snapha.dto.ResponseFileUploadDto;
+import cn.perhome.snapha.security.AuthUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
+import org.springframework.security.core.Authentication;
+
 import cn.perhome.snapha.config.MinioConfig;
 import io.minio.*;
 import io.minio.errors.*;
 import io.minio.messages.Bucket;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +27,7 @@ import java.util.*;
 public class MinioUtils {
 
     private final MinioConfig minioConfig;
-    private final MinioClient minioClient;
+    private final MinioClient    minioClient;
 
     public void createBucket(String bucketName) throws Exception {
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
@@ -39,7 +42,9 @@ public class MinioUtils {
     /**
      * 上传文件
      */
-    public ResponseFileUploadDto uploadFile(MultipartFile file, String bucketName, Map tags) throws Exception {
+    public ResponseFileUploadDto uploadFile(MultipartFile file
+            , String bucketName
+            , Map<String, String> tags) throws Exception {
         //判断文件是否为空
         if (null == file || 0 == file.getSize()) {
             return null;
@@ -51,20 +56,8 @@ public class MinioUtils {
         String originalFilename = file.getOriginalFilename();
         //新的文件名 = 存储桶文件名_时间戳.后缀名
         assert originalFilename != null;
-        SimpleDateFormat formatDay;
-        if (!StringUtils.hasLength(bucketName)) {
-           bucketName = "test";
-        }
-        if (bucketName.endsWith("daily")) {
-            formatDay = new SimpleDateFormat("yyyy/MM/dd/");
-        }
-        else if (bucketName.endsWith("yearly")) {
-            formatDay = new SimpleDateFormat("yyyy/");
-        }
-        else {
-            formatDay = new SimpleDateFormat("yyyy/MM/");
+        SimpleDateFormat formatDay = new SimpleDateFormat("yyyy/MM/dd/");
 
-        }
         String fileName = formatDay.format(today) + originalFilename.replace(" ", "_");
         //开始上传
         minioClient.putObject(
@@ -74,12 +67,17 @@ public class MinioUtils {
                         .build());
 
         if (tags != null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            var authUser = (AuthUser)authentication.getPrincipal();
+            tags.put("user_id", String.valueOf(authUser.getId()));
+            tags.put("user_sn", authUser.getPassport());
             minioClient.setObjectTags(
                     SetObjectTagsArgs.builder().bucket(bucketName).object(fileName).tags(tags).build());
         }
-        String urlHost = minioConfig.getEndpoint() + "/" + bucketName + "/" + fileName;
-        String urlHttp = minioConfig.getHost() + "/" + bucketName + "/" + fileName;
-//        log.info("上传文件成功url, urlHttp ：[{}]", urlHttp);
+
+        String urlHost = String.join("/", new String[]{minioConfig.getEndpoint(), bucketName, fileName});
+        String urlHttp = String.join("/", new String[]{minioConfig.getHost(), bucketName, fileName});
+
         return new ResponseFileUploadDto(urlHost, urlHttp);
     }
 
@@ -90,20 +88,9 @@ public class MinioUtils {
         //判断存储桶是否存在  不存在则创建
         createBucket(bucketName);
 
-        SimpleDateFormat formatDay;
-        if (!StringUtils.hasLength(bucketName)) {
-            bucketName = "test";
-        }
-        if (bucketName.endsWith("daily")) {
-            formatDay = new SimpleDateFormat("yyyy/MM/dd/");
-        }
-        else if (bucketName.endsWith("yearly")) {
-            formatDay = new SimpleDateFormat("yyyy/");
-        }
-        else {
-            formatDay = new SimpleDateFormat("yyyy/MM/");
-        }
-        String fileName = formatDay.format(today) + originFileName;
+        SimpleDateFormat formatDay = new SimpleDateFormat("yyyy/MM/dd/");
+
+        String fileName = formatDay.format(today) + originFileName.replace(" ", "_");
         //开始上传
         minioClient.putObject(
                 PutObjectArgs.builder().bucket(bucketName).object(fileName).stream(
@@ -111,8 +98,8 @@ public class MinioUtils {
                         .contentType(contentType)
                         .build());
 
-        String urlHost = minioConfig.getEndpoint() + "/" + bucketName + "/" + fileName;
-        String urlHttp = minioConfig.getHost() + "/" + bucketName + "/" + fileName;
+        String urlHost = String.join("/", new String[]{minioConfig.getEndpoint(), bucketName, fileName});
+        String urlHttp = String.join("/", new String[]{minioConfig.getHost(), bucketName, fileName});
         return new ResponseFileUploadDto(urlHost, urlHttp);
     }
 
