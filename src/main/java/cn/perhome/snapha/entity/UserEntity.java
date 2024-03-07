@@ -13,27 +13,29 @@ import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Table(value = "user")
 public class UserEntity implements Serializable {
     @Id
-    private Long           uid;
-    private String         usn;
-    private String         name;
+    private Long      uid;
+    private String    usn;
+    private String    name;
     @Enumerated(EnumType.STRING)
-    private String         nameAbbr;
-    private String         nameSpell;
+    private String    nameAbbr;
+    private String    nameSpell;
     private Integer        jobId;
     private Integer        departmentId;
     private String         jobName;
     private String         groupName;
     private Integer        groupId;
     private String         jobType;
-    private String         sex;
-    private Role           role = Role.USER;
+    private String    sex;
+    private String[] roles;
     @JsonIgnore
-    private String         password;
+    private String    password;
     private Integer        status;
     private Integer        deleted;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")

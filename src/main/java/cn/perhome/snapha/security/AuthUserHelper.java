@@ -2,11 +2,15 @@ package cn.perhome.snapha.security;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import cn.perhome.snapha.mapper.UserMapper;
-import java.util.Optional;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class AuthUserHelper {
 
@@ -15,10 +19,13 @@ public class AuthUserHelper {
         AuthUser authUser = new AuthUser();
         var user          = userMapper.getByPassport(passport);
         if (user != null) {
+            Set<Role> setRoles = Arrays.stream(user.getRoles())
+                    .map(Role::valueOf)
+                    .collect(Collectors.toSet());
             authUser = AuthUser.builder()
                     .passport(user.getUsn())
                     .id(user.getUid())
-                    .role(user.getRole())
+                    .roles(setRoles)
                     .build();
         }
         return Optional.of(authUser);

@@ -29,7 +29,6 @@ public class AuthenticationService {
         var user = AuthUser.builder()
                 .passport(request.getPassport())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
                 .build();
         var savedUser = authUserHelper.save(user);
         var jwtToken = jwtService.generateToken(user);

@@ -15,8 +15,11 @@
         SELECT count(*) FROM "user" ${qwSql}
     </select>
 
-
-    <select id="getByPassport" resultType="cn.perhome.snapha.entity.UserEntity">
+    <resultMap id="BaseResultMap" type="cn.perhome.snapha.entity.UserEntity">
+        <result column="roles" property="roles" jdbcType="ARRAY"
+                typeHandler="cn.perhome.snapha.utils.postgres.ArrayTypeHandler"/>
+    </resultMap>
+    <select id="getByPassport" resultMap="BaseResultMap">
         SELECT t1.*
         FROM "user" t1
         <where>

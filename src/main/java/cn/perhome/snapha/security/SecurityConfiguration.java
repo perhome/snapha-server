@@ -51,7 +51,6 @@ public class SecurityConfiguration {
                 .requestMatchers(
                         "/api/v1/auth/**",
                         "/app/websocket",
-                        "/h2/**",
                         "/ui/**",
                         "/favicon.ico",
                         "/error",
@@ -59,6 +58,7 @@ public class SecurityConfiguration {
                 )
                 .permitAll()
                 .requestMatchers("/api/v1/**").hasAnyRole(ADMIN.name(), MANAGER.name(), USER.name())
+                .requestMatchers("/pdaapi/v1/**").hasAnyRole(MANAGER.name(), USER.name())
                 .anyRequest()
                 .authenticated()
             )

@@ -8,10 +8,7 @@ import cn.perhome.snapha.dto.form.FormRegisterDto;
 import cn.perhome.snapha.entity.UserEntity;
 
 import cn.perhome.snapha.mapper.UserMapper;
-import cn.perhome.snapha.security.AuthUser;
-import cn.perhome.snapha.security.AuthenticationResponse;
-import cn.perhome.snapha.security.AuthenticationService;
-import cn.perhome.snapha.security.JwtService;
+import cn.perhome.snapha.security.*;
 import cn.perhome.snapha.service.UserService;
 import cn.perhome.snapha.utils.DateUtils;
 import com.mybatisflex.core.util.UpdateEntity;
@@ -26,7 +23,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -89,10 +92,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
         entity.setLastLoginIp(request.getRemoteAddr());
         this.userMapper.update(entity);
 
+
+        Set<Role> setRoles = Arrays.stream(userEntity.getRoles())
+                .map(Role::valueOf)
+                .collect(Collectors.toSet());
         var authUser = AuthUser.builder()
                 .passport(userEntity.getUsn())
                 .id(userEntity.getUid())
-                .role(userEntity.getRole())
+                .roles(setRoles)
                 .build();
         var jwtToken = jwtService.generateToken(authUser);
         var refreshToken = jwtService.generateRefreshToken(authUser);

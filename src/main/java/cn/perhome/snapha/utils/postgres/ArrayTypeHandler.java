@@ -15,12 +15,15 @@ public class ArrayTypeHandler extends BaseTypeHandler<Object[]> {
     private static final String TYPE_NAME_INTEGER = "integer";
     private static final String TYPE_NAME_BOOLEAN = "boolean";
     private static final String TYPE_NAME_NUMERIC = "numeric";
+    private static final String TYPE_NAME_LONG    = "bigint";
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, Object[] parameter, JdbcType jdbcType) throws SQLException {
         String typeName = null;
         if (parameter instanceof Integer[]) {
             typeName = TYPE_NAME_INTEGER;
+        } else if (parameter instanceof Long[]) {
+            typeName = TYPE_NAME_LONG;
         } else if (parameter instanceof String[]) {
             typeName = TYPE_NAME_VARCHAR;
         } else if (parameter instanceof Boolean[]) {
