@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.perhome.snapha.mapper.SerialMapper">
+    <select id="getValue" resultType="cn.perhome.snapha.entity.SerialEntity">
+        SELECT nextval(#{name}) AS "value";
+    </select>
+</mapper>

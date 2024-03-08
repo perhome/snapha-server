@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.perhome.snapha.mapper.GoodsCategoryMapper">
+
+    <resultMap id="BaseTreeResultMap" type="cn.perhome.snapha.model.GoodsCategory">
+        <result column="gcid" property="gcid"/>
+        <result column="parent_gcid" property="parentGcid"/>
+        <collection column="gcid" property="children" javaType="java.util.ArrayList"
+                    ofType="cn.perhome.snapha.model.GoodsCategory" select="getNextTreeList"/>
+    </resultMap>
+    <select id="getNextTreeList" resultMap="BaseTreeResultMap" parameterType="integer">
+        SELECT
+            t1.name, t1.gcsn, t1.gcid, t1.parent_gcid
+        FROM "goods_category" t1
+            WHERE t1.parent_gcid = #{gcid} AND t1.deleted = 0
+    </select>
+    <select id="getTreeList" resultMap="BaseTreeResultMap" parameterType="integer">
+        SELECT
+            t1.name, t1.gcsn, t1.gcid, t1.parent_gcid
+        FROM "goods_category" t1
+            WHERE t1.deleted = 0 AND t1.parent_gcid = #{parentGcid}
+    </select>
+
+
+    <select id="getLisByParentId" resultType="cn.perhome.snapha.entity.GoodsCategoryEntity" >
+        SELECT t1.*
+            FROM "goods_category" t1
+        WHERE t1.parent_gcid = #{parentGcid}
+            ORDER BY t1.gcid DESC
+    </select>
+</mapper>

@@ -45,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
     private final SnaphaConstant       snaphaConstant;
     private final MyUserInsertListener myUserInsertListener;
 
-
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseResultDto register(FormRegisterDto formRegisterDto) {
         String ip = this.request.getRemoteAddr();
@@ -62,6 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
         return ResponseResultDto.success(result);
     }
 
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public ResponseResultDto login(FormLoginDto formLoginDto) {
         ResponseResultDto responseResultDto;
@@ -111,6 +112,5 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
         responseResultDto = ResponseResultDto.success(authenticationResponse);
         return responseResultDto;
     }
-
 
 }
