@@ -12,10 +12,11 @@ import java.util.stream.Collectors;
 
 import static cn.perhome.snapha.security.Permission.*;
 
-@RequiredArgsConstructor
+@Getter
+
 public enum Role {
 
-    USER(Collections.emptySet()),
+    USER(Collections.emptySet(), "普通用户"),
     ADMIN(
             Set.of(
                     ADMIN_READ,
@@ -23,6 +24,7 @@ public enum Role {
                     ADMIN_DELETE,
                     ADMIN_CREATE
             )
+            , "管理员"
     ),
     MANAGER(
             Set.of(
@@ -31,6 +33,7 @@ public enum Role {
                     MANAGER_DELETE,
                     MANAGER_CREATE
             )
+            , "主管"
     ),
     WORKER(
             Set.of(
@@ -39,11 +42,18 @@ public enum Role {
                     WORKER_DELETE,
                     WORKER_CREATE
             )
+            , "一线员工"
     )
     ;
 
-    @Getter
+
     private final Set<Permission> permissions;
+    private final String name;
+
+    Role(Set<Permission> permissions, String name) {
+        this.permissions = permissions;
+        this.name = name;
+    }
 
     public List<SimpleGrantedAuthority> getAuthorities() {
         var authorities = getPermissions()

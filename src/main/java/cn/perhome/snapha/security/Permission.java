@@ -7,19 +7,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Permission {
 
-    ADMIN_READ("admin:read"),
-    ADMIN_UPDATE("admin:update"),
-    ADMIN_CREATE("admin:create"),
-    ADMIN_DELETE("admin:delete"),
-    MANAGER_READ("management:read"),
-    MANAGER_UPDATE("management:update"),
-    MANAGER_CREATE("management:create"),
-    MANAGER_DELETE("management:delete"),
-    WORKER_READ("worker:read"),
-    WORKER_UPDATE("worker:update"),
-    WORKER_CREATE("worker:create"),
-    WORKER_DELETE("worker:delete")
+    ADMIN_READ("admin:read", "查看"),
+    ADMIN_UPDATE("admin:update", "修改"),
+    ADMIN_CREATE("admin:create", "新增"),
+    ADMIN_DELETE("admin:delete", "删除"),
+    MANAGER_READ("management:read", "查看"),
+    MANAGER_UPDATE("management:update", "修改"),
+    MANAGER_CREATE("management:create", "新增"),
+    MANAGER_DELETE("management:delete","删除"),
+    WORKER_READ("worker:read", "查看"),
+    WORKER_UPDATE("worker:update", "修改"),
+    WORKER_CREATE("worker:create", "新增"),
+    WORKER_DELETE("worker:delete", "删除")
     ;
 
     private final String permission;
+    private final String name;
 }

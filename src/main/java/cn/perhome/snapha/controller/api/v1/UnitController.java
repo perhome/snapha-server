@@ -27,7 +27,7 @@ import org.springframework.beans.BeanUtils;
 import static cn.perhome.snapha.entity.table.UnitEntityTableDef.UNIT_ENTITY;
 
 
-@PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+@PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 @Tag(name = "单位管理")
 @Slf4j
 @RestController
