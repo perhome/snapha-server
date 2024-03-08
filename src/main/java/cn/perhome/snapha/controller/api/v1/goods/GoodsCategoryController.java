@@ -75,7 +75,7 @@ public class GoodsCategoryController {
 
     @RequestMapping(value = "{goodsCategoryId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> put(@PathVariable Integer goodsCategoryId) {
+    public ResponseEntity<ResponseResultDto> delete(@PathVariable Integer goodsCategoryId) {
         boolean isSuccess = this.goodsCategoryService.removeById(goodsCategoryId);
         ResponseResultDto responseResultDto
                 = isSuccess? ResponseResultDto.success(isSuccess)
@@ -86,7 +86,6 @@ public class GoodsCategoryController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<ResponseResultDto> list(QueryDto query) {
-//        QueryCondition queryCondition = QueryCondition.create(UNIT_ENTITY.DELETED, 0);
         QueryWrapper queryWrapper = QueryWrapper.create().select(GOODS_CATEGORY_ENTITY.ALL_COLUMNS)
                 .orderBy(GOODS_CATEGORY_ENTITY.WEIGHT, false);
         List<GoodsCategoryEntity> list = this.goodsCategoryService.list(queryWrapper);
