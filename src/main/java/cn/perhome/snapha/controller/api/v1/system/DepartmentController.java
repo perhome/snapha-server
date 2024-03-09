@@ -18,7 +18,6 @@ import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static cn.perhome.snapha.entity.table.DepartmentEntityTableDef.DEPARTMENT_ENTITY;
-import static cn.perhome.snapha.entity.table.GoodsCategoryEntityTableDef.GOODS_CATEGORY_ENTITY;
+
 
 @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
 @Tag(name = "系统部门管理")
