@@ -42,7 +42,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
     private final HttpServletRequest    request;
     private final JwtService            jwtService;
     private final AuthenticationService authenticationService;
-    private final SnaphaConstant       snaphaConstant;
     private final MyUserInsertListener myUserInsertListener;
 
     @Override
