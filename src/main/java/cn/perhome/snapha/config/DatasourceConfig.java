@@ -19,16 +19,4 @@ public class DatasourceConfig {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "flowableDataSource")
-    @ConfigurationProperties(prefix = "flowable.datasource")
-    public DataSource secondaryDataSource() {
-        return DataSourceBuilder.create().build();
-    }
-
-    @Bean(name = "flowableTransactionManager")
-    public PlatformTransactionManager transactionManager() {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-        transactionManager.setDataSource(secondaryDataSource());
-        return transactionManager;
-    }
 }
