@@ -12,13 +12,13 @@ import java.util.List;
 @Table("goods_category")
 public class GoodsCategoryEntity implements Serializable {
     @Id(keyType = KeyType.Auto)
-    private Integer             gcid;
-    private String              name;
-    private String              nameAbbr;
-    private String              gcsn;
-    private Integer             weight;
-    private Integer             deleted;
+    private Integer gcid;
+    private String  name;
+    private String  nameAbbr;
+    private String  gcsn;
+    private Integer weight;
+    private Integer deleted;
     private Integer status;
     private String  nameSpell;
-    private Integer             parentGcid;
+    private Integer parentGcid;
 }
