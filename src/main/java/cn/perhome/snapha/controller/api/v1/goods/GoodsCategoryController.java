@@ -73,6 +73,7 @@ public class GoodsCategoryController {
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('admin:delete')")
     @RequestMapping(value = "{goodsCategoryId}", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<ResponseResultDto> delete(@PathVariable Integer goodsCategoryId) {

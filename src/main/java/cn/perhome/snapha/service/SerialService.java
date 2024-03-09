@@ -1,5 +1,7 @@
 package cn.perhome.snapha.service;
 
+import org.springframework.stereotype.Service;
+
 public interface SerialService {
 
     int getActionId();

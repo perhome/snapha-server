@@ -4,7 +4,9 @@ import cn.perhome.snapha.entity.SerialEntity;
 import cn.perhome.snapha.mapper.SerialMapper;
 import cn.perhome.snapha.service.SerialService;
 import jakarta.annotation.Resource;
+import org.springframework.stereotype.Service;
 
+@Service
 public class SerialServiceImpl  implements SerialService {
     @Resource
     private SerialMapper serialMapper;
