@@ -8,6 +8,7 @@ import cn.perhome.snapha.service.WorkspaceService;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,9 @@ public class WorkspaceServiceImpl extends ServiceImpl<WorkspaceMapper, Workspace
             form.setWsn(StringUtils.isNotBlank(parentWsn)
                     ? String.format("%s-%d", parentWsn, wsnId):String.valueOf(wsnId));
         }
-        return this.save(form);
+        WorkspaceEntity entity = new WorkspaceEntity();
+        BeanUtils.copyProperties(form, entity);
+        int result = this.workspaceMapper.snaphaCreate(entity);
+        return result > 0;
     }
 }

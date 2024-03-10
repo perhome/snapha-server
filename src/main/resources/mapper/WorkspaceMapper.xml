@@ -28,4 +28,59 @@
         WHERE t1.parent_wid = #{parentWid}
         ORDER BY t1.wid DESC
     </select>
+
+    <insert id="snaphaCreate" parameterType="cn.perhome.snapha.entity.WorkspaceEntity">
+        INSERT INTO "workspace"
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test='wid!=null'>wid,</if>
+            <if test='wsn!=null'>wsn,</if>
+            <if test='name!=null'>name,</if>
+            <if test='scheme!=null'>scheme,</if>
+            <if test='area!=null'>area,</if>
+            <if test='weight!=null'>weight,</if>
+            <if test='groupId!=null'>group_id,</if>
+            <if test='remark!=null'>remark,</if>
+            <if test='status!=null'>status,</if>
+            <if test='deleted!=null'>deleted,</if>
+            <if test='parentWid!=null'>parent_wid,</if>
+            <if test='name!=null'>full_index,</if>
+            <if test='block!=null'>block,</if>
+            <if test='blockUnit!=null'>block_unit,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test='wid!=null'>#{wid},</if>
+            <if test='wsn!=null'>#{wsn},</if>
+            <if test='name!=null'>#{name},</if>
+            <if test='scheme!=null'>#{scheme},</if>
+            <if test='area!=null'>#{area},</if>
+            <if test='weight!=null'>#{weight},</if>
+            <if test='groupId!=null'>#{groupId},</if>
+            <if test='remark!=null'>#{remark},</if>
+            <if test='status!=null'>#{status},</if>
+            <if test='deleted!=null'>#{deleted},</if>
+            <if test='parentWid!=null'>#{parentWid},</if>
+            <if test='name!=null'>full_workspace_index(#{name}),</if>
+            <if test='block!=null'>#{block},</if>
+            <if test='blockUnit!=null'>#{blockUnit},</if>
+        </trim>
+        ON CONFLICT(wid) DO UPDATE
+        <set>
+            <if test='wid!=null'>wid=#{wid},</if>
+            <if test='wsn!=null'>wsn=#{wsn},</if>
+            <if test='name!=null'>name=#{name},</if>
+            <if test='scheme!=null'>scheme=#{scheme},</if>
+            <if test='area!=null'>area=#{area},</if>
+            <if test='weight!=null'>weight=#{weight},</if>
+            <if test='groupId!=null'>group_id=#{groupId},</if>
+            <if test='remark!=null'>remark=#{remark},</if>
+            <if test='status!=null'>status=#{status},</if>
+            <if test='deleted!=null'>deleted=#{deleted},</if>
+            <if test='parentWid!=null'>parent_wid=#{parentWid},</if>
+            <if test='name!=null'>full_index=full_workspace_index(#{name}),</if>
+            <if test='block!=null'>block=#{block},</if>
+            <if test='blockUnit!=null'>block_unit=#{blockUnit},</if>
+        </set>
+    </insert>
+
 </mapper>
