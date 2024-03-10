@@ -50,7 +50,6 @@ public class SecurityConfiguration {
                 .requestMatchers(OPTIONS, "/**").permitAll()
                 .requestMatchers(
                         "/api/v1/auth/**",
-                        "/app/websocket",
                         "/ui/**",
                         "/favicon.ico",
                         "/error",
