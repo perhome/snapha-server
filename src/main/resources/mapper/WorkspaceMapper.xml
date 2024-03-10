@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.perhome.snapha.mapper.WorkspaceMapper">
+
+    <resultMap id="BaseTreeResultMap" type="cn.perhome.snapha.model.Workspace">
+        <result column="wid" property="wid"/>
+        <collection column="wid" property="children" javaType="java.util.ArrayList"
+                    ofType="cn.perhome.snapha.model.Workspace" select="getNextTreeList"/>
+    </resultMap>
+
+    <select id="getNextTreeList" resultMap="BaseTreeResultMap" parameterType="long">
+        SELECT
+            t1.*
+        FROM "workspace" t1
+        WHERE t1.parent_wid = #{wid} AND t1.deleted = 0
+    </select>
+
+    <select id="getTreeList" resultMap="BaseTreeResultMap" parameterType="long">
+        SELECT
+            t1.*
+        FROM "workspace" t1
+        WHERE t1.deleted = 0 AND t1.parent_wid = #{parentWid}
+    </select>
+
+    <select id="getLisByParentId" resultType="cn.perhome.snapha.model.Workspace" >
+        SELECT t1.*
+        FROM "workspace" t1
+        WHERE t1.parent_wid = #{parentWid}
+        ORDER BY t1.wid DESC
+    </select>
+</mapper>

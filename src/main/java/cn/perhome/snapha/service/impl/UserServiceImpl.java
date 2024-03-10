@@ -1,12 +1,10 @@
 package cn.perhome.snapha.service.impl;
 
 import cn.perhome.snapha.component.MyUserInsertListener;
-import cn.perhome.snapha.config.constant.SnaphaConstant;
 import cn.perhome.snapha.dto.ResponseResultDto;
 import cn.perhome.snapha.dto.form.FormLoginDto;
 import cn.perhome.snapha.dto.form.FormRegisterDto;
 import cn.perhome.snapha.entity.UserEntity;
-
 import cn.perhome.snapha.mapper.UserMapper;
 import cn.perhome.snapha.security.*;
 import cn.perhome.snapha.service.UserService;
@@ -16,18 +14,11 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 
-import java.lang.reflect.Array;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 

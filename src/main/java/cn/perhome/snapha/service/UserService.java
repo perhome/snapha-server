@@ -9,4 +9,5 @@ import com.mybatisflex.core.service.IService;
 public interface UserService extends IService<UserEntity> {
     ResponseResultDto register(FormRegisterDto formRegisterDto);
     ResponseResultDto login(FormLoginDto formLoginDto);
+
 }
