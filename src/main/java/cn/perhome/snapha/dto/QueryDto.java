@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 public class  QueryDto {
     private int    currentPage = 1;
     private int    pageSize    = 10;
-    private long   totalRow    = 0;
-    private String id;
+    private long   totalRow    = 0L;
+    private Long   id;
     private String keyword;
     private String start_date;
     private String end_date;

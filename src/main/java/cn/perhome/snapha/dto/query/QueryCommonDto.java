@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class QueryCommonDto extends QueryDto {
-    private String id;
+    private Long  id;
     private String keyword;
     private String start_date;
     private String end_date;

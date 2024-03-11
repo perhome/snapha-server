@@ -10,10 +10,10 @@ public class SpellUtils {
 
     public static String abbr(String str) {
         String spell = Pinyin.toPinyin(str, "#").toLowerCase();
-        String[] arrStr = spell.split("#");
-        StringBuffer ret = new StringBuffer();
+        String[]      arrStr = spell.split("#");
+        StringBuilder ret    = new StringBuilder();
         for (String s : arrStr) {
-            if (s.length() > 0) {
+            if (!s.isEmpty()) {
                 ret.append(s.charAt(0));
             }
         }

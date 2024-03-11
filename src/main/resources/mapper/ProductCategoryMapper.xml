@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.perhome.snapha.mapper.ProductCategoryMapper">
+
+    <resultMap id="BaseTreeResultMap" type="cn.perhome.snapha.model.ProductCategory">
+        <result column="pcid" property="pcid"/>
+        <collection column="gcid" property="children" javaType="java.util.ArrayList"
+                    ofType="cn.perhome.snapha.model.ProductCategory" select="getNextTreeList"/>
+    </resultMap>
+
+    <select id="getNextTreeList" resultMap="BaseTreeResultMap" parameterType="long">
+        SELECT
+            t1.*
+        FROM "product_category" t1
+        WHERE t1.parent_pcid = #{pcid} AND t1.deleted = 0
+    </select>
+
+    <select id="getTreeList" resultMap="BaseTreeResultMap" parameterType="long">
+        SELECT
+            t1.*
+        FROM "product_category" t1
+        WHERE t1.deleted = 0 AND t1.parent_pcid = #{parentPcid}
+    </select>
+</mapper>
