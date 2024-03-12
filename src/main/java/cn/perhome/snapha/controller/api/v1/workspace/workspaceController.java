@@ -37,11 +37,11 @@ public class workspaceController {
     @ResponseBody
     public ResponseEntity<ResponseResultDto> post(@RequestBody FormWorkspaceDto form) {
 
-        Boolean isSuccess = this.workspaceService.snaphaCreate(form);
+        WorkspaceEntity entity = this.workspaceService.snaphaCreate(form);
         ResponseResultDto responseResultDto
-                = isSuccess? ResponseResultDto.success(isSuccess)
+                = entity != null? ResponseResultDto.success(true)
                 : ResponseResultDto.failed(500, "failed to save");
-        responseResultDto.setData(form);
+        responseResultDto.setData(entity);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 

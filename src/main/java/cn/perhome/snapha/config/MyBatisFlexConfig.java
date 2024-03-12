@@ -1,26 +1,34 @@
 package cn.perhome.snapha.config;
 
 
-
 import cn.perhome.snapha.component.MyUserInsertListener;
 import cn.perhome.snapha.entity.UserEntity;
 import com.mybatisflex.core.FlexGlobalConfig;
 import com.mybatisflex.spring.boot.MyBatisFlexCustomizer;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
-
 @Configuration
+@Slf4j
 public class MyBatisFlexConfig implements MyBatisFlexCustomizer {
 
-    private final MyUserInsertListener myUserInsertListener;
+    private final        MyUserInsertListener myUserInsertListener;
+    private static final Logger               logger
+            = LoggerFactory.getLogger("mybatis-flex-sql");
 
     public MyBatisFlexConfig(MyUserInsertListener myUserInsertListener) {
+
         this.myUserInsertListener = myUserInsertListener;
+//        AuditManager.setAuditEnable(true);
+//        //设置 SQL 审计收集器
+//        AuditManager.setMessageCollector(auditMessage ->
+//                logger.info("{}, {}, {}, {}ms", auditMessage.getHostIp()
+//                        , auditMessage.getModule()
+//                        , auditMessage.getFullSql()
+//                        , auditMessage.getElapsedTime())
+//        );
     }
 
     @Override

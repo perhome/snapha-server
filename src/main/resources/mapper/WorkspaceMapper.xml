@@ -43,7 +43,7 @@
             <if test='status!=null'>status,</if>
             <if test='deleted!=null'>deleted,</if>
             <if test='parentWid!=null'>parent_wid,</if>
-            <if test='name!=null'>full_index,</if>
+            <if test='fullIndex!=null'>full_index,</if>
             <if test='block!=null'>block,</if>
             <if test='blockUnit!=null'>block_unit,</if>
         </trim>
@@ -60,7 +60,7 @@
             <if test='status!=null'>#{status},</if>
             <if test='deleted!=null'>#{deleted},</if>
             <if test='parentWid!=null'>#{parentWid},</if>
-            <if test='name!=null'>full_workspace_index(#{name}),</if>
+            <if test='fullIndex!=null'>real_workspace_index(#{name}),</if>
             <if test='block!=null'>#{block},</if>
             <if test='blockUnit!=null'>#{blockUnit},</if>
         </trim>
@@ -77,10 +77,16 @@
             <if test='status!=null'>status=#{status},</if>
             <if test='deleted!=null'>deleted=#{deleted},</if>
             <if test='parentWid!=null'>parent_wid=#{parentWid},</if>
-            <if test='name!=null'>full_index=full_workspace_index(#{name}),</if>
+            <if test='fullIndex!=null'>full_index=real_workspace_index(#{name}),</if>
             <if test='block!=null'>block=#{block},</if>
             <if test='blockUnit!=null'>block_unit=#{blockUnit},</if>
         </set>
     </insert>
+
+    <update id="snaphaUpdateIndex" parameterType="cn.perhome.snapha.entity.WorkspaceEntity">
+        UPDATE "workspace"
+         SET full_index = real_workspace_index(#{name})
+        WHERE wid = #{wid}
+    </update>
 
 </mapper>

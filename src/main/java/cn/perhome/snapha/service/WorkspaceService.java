@@ -6,5 +6,5 @@ import cn.perhome.snapha.entity.WorkspaceEntity;
 import com.mybatisflex.core.service.IService;
 
 public interface WorkspaceService extends IService<WorkspaceEntity> {
-    Boolean snaphaCreate(FormWorkspaceDto form);
+    WorkspaceEntity snaphaCreate(FormWorkspaceDto form);
 }

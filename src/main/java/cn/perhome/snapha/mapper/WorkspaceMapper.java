@@ -19,5 +19,7 @@ public interface WorkspaceMapper extends BaseMapper<WorkspaceEntity> {
     List<Workspace> getLisByParentId(Long parentWid);
 
     int snaphaCreate(WorkspaceEntity entity);
+
+    int snaphaUpdateIndex(WorkspaceEntity entity);
 }
 
