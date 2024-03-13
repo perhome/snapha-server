@@ -2,13 +2,10 @@ package cn.perhome.snapha.controller.api.v1;
 
 import cn.perhome.snapha.dto.QueryDto;
 import cn.perhome.snapha.dto.ResponseResultDto;
-
 import cn.perhome.snapha.dto.form.FormUserDto;
-import cn.perhome.snapha.dto.query.QueryCommonDto;
 import cn.perhome.snapha.entity.UserEntity;
 import cn.perhome.snapha.mapper.UserMapper;
 import cn.perhome.snapha.security.AuthUser;
-import cn.perhome.snapha.security.AuthenticationService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mybatisflex.core.paginate.Page;
@@ -25,8 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import cn.perhome.snapha.security.JwtService;
-import java.util.*;
+import java.util.List;
 
 import static cn.perhome.snapha.entity.table.UserEntityTableDef.USER_ENTITY;
 
@@ -44,11 +40,10 @@ public class UserController {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<ResponseResultDto> logout(Authentication authentication) {
-        Map<String, Object > ret = new HashMap<>();
         ResponseResultDto responseResultDto;
         var authUser = (AuthUser)authentication.getPrincipal();
         log.info("用户 {}({}) 退出了系统", authUser.getId(), authUser.getUsername());
-        responseResultDto = ResponseResultDto.success(ret);
+        responseResultDto = ResponseResultDto.success(null);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 

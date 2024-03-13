@@ -1,10 +1,13 @@
 package cn.perhome.snapha.mapper;
+
 import cn.perhome.snapha.entity.GroupEntity;
 import cn.perhome.snapha.model.GoodsCategory;
 import com.mybatisflex.core.BaseMapper;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+
 import java.util.List;
-import java.util.Map;
     
 @Mapper
 public interface GroupMapper extends BaseMapper<GroupEntity> {
@@ -12,5 +15,7 @@ public interface GroupMapper extends BaseMapper<GroupEntity> {
     int getNextId();
 
     List<GoodsCategory> getTreeList(@Param("parentGid") Integer parentGid);
+
+
 }
 

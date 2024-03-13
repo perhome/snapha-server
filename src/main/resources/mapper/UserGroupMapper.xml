@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.perhome.snapha.mapper.UserGroupMapper">
+    <select id="getUserListByGroupId" resultType="cn.perhome.snapha.entity.UserEntity">
+        SELECT t2.uid, t2.name, t1.group_id
+        FROM "user_group" t1
+        LEFT JOIN "user" t2
+        ON t1.user_id = t2.uid
+        <where>
+            t1.group_id = #{groupId} AND t2.deleted = 0
+        </where>
+    </select>
+</mapper>

@@ -12,4 +12,5 @@ public interface UserMapper extends BaseMapper<UserEntity> {
     List<UserEntity> getListByXml();
     long getListByXml_COUNT();
     UserEntity getByPassport(String passport);
+
 }

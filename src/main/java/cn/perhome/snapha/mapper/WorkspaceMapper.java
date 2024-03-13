@@ -20,6 +20,6 @@ public interface WorkspaceMapper extends BaseMapper<WorkspaceEntity> {
 
     int snaphaCreate(WorkspaceEntity entity);
 
-    int snaphaUpdateIndex(WorkspaceEntity entity);
+    int updateIndexById(Long wid);
 }
 

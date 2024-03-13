@@ -4,23 +4,21 @@ import cn.perhome.snapha.dto.QueryDto;
 import cn.perhome.snapha.dto.ResponseResultDto;
 import cn.perhome.snapha.dto.form.FormUnitDto;
 import cn.perhome.snapha.entity.UnitEntity;
-import cn.perhome.snapha.entity.UserEntity;
 import cn.perhome.snapha.mapper.UnitMapper;
-import cn.perhome.snapha.mapper.UserMapper;
 import cn.perhome.snapha.service.UnitService;
 import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.beans.BeanUtils;
+
 import static cn.perhome.snapha.entity.table.UnitEntityTableDef.UNIT_ENTITY;
 
 
@@ -77,7 +75,7 @@ public class UnitController {
 
     @RequestMapping(value = "{unitId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> put(@PathVariable Long unitId) {
+    public ResponseEntity<ResponseResultDto> delete(@PathVariable Long unitId) {
         boolean isSuccess = this.unitService.removeById(unitId);
         ResponseResultDto responseResultDto
                 = isSuccess? ResponseResultDto.success(isSuccess)
