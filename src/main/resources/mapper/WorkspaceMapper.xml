@@ -85,7 +85,7 @@
 
     <update id="updateIndexById" parameterType="cn.perhome.snapha.entity.WorkspaceEntity">
         UPDATE "workspace"
-         SET full_index = real_workspace_index("name")
+            SET full_index = real_workspace_index("name")
         WHERE wid = #{wid}
     </update>
 

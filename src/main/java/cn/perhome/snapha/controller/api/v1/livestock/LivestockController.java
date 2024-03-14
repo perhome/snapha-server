@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
-@Tag(name = "统计管理")
+@Tag(name = "养殖管理")
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/livestock")

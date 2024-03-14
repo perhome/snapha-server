@@ -38,7 +38,7 @@ public class CfrProductController {
         boolean isSuccess = this.cfrProductService.save(form);
         ResponseResultDto responseResultDto
                 = isSuccess? ResponseResultDto.success(isSuccess)
-                : ResponseResultDto.failed(500, "failed to save");
+                    : ResponseResultDto.failed(500, "failed to save");
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
@@ -55,7 +55,7 @@ public class CfrProductController {
 
         ResponseResultDto responseResultDto
                 = isSuccess? ResponseResultDto.success(isSuccess)
-                : ResponseResultDto.failed(500, "failed to save");
+                    : ResponseResultDto.failed(500, "failed to save");
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
@@ -65,7 +65,7 @@ public class CfrProductController {
         boolean isSuccess = this.cfrProductService.removeById(cfrProductId);
         ResponseResultDto responseResultDto
                 = isSuccess? ResponseResultDto.success(isSuccess)
-                : ResponseResultDto.failed(500, "failed to delete");
+                    : ResponseResultDto.failed(500, "failed to delete");
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
