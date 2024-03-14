@@ -8,5 +8,5 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class CfrProduct extends CfrProductEntity {
-
+    public String workspaceName;
 }

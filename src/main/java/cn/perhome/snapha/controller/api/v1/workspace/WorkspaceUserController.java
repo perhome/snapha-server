@@ -42,7 +42,7 @@ public class WorkspaceUserController {
     public ResponseEntity<ResponseResultDto> postGroup(
             @RequestBody WorkspaceUserEntity form) {
 
-        boolean isSuccess = workspaceService.setWorkspaceUserGroupById(form.getWorkspaceId(), form.getGroupId());
+        boolean isSuccess = workspaceService.setWorkspaceUserGroupById(form);
         ResponseResultDto responseResultDto
                 = isSuccess ? ResponseResultDto.success(true)
                 : ResponseResultDto.failed(500, "failed to save");
