@@ -64,6 +64,17 @@ public class UserController {
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
+
+    @RequestMapping(value = "info", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<ResponseResultDto> getInfo(Authentication authentication) {
+        var authUser = (AuthUser)authentication.getPrincipal();
+        Long userId = authUser.getId();
+        UserEntity entity = this.userMapper.selectOneById(userId);
+        ResponseResultDto responseResultDto = ResponseResultDto.success(entity);
+        return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasAuthority('admin:read')")
     @RequestMapping(value = "{userId}", method = RequestMethod.GET)
     @ResponseBody
