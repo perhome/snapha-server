@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class QueryCfrProductDto extends QueryDto {
 
-    private Long           userId;
-    private Long           productId;
-    private Long           workspaceId;
+    private Long    productId;
+    private Long    workspaceId;
 }

@@ -1,8 +1,8 @@
 package cn.perhome.snapha.security;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 import static cn.perhome.snapha.security.Permission.*;
 
 @Getter
-
 public enum Role {
 
     USER(Collections.emptySet(), "普通用户"),
@@ -44,10 +43,32 @@ public enum Role {
             )
             , "一线员工"
     )
+    ,
+    FARMLAND(
+            Set.of(
+            FARMLAND_READ,
+            FARMLAND_UPDATE,
+            FARMLAND_DELETE,
+            FARMLAND_CREATE
+            )
+            , "种植区"
+    )
+    ,
+    LIVESTOCK(
+            Set.of(
+            LIVESTOCK_READ,
+            LIVESTOCK_UPDATE,
+            LIVESTOCK_DELETE,
+            LIVESTOCK_CREATE
+            )
+            , "养殖区"
+    )
     ;
 
 
+    @JsonProperty("permissions")
     private final Set<Permission> permissions;
+    @JsonProperty("name")
     private final String name;
 
     Role(Set<Permission> permissions, String name) {

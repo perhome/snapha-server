@@ -18,7 +18,15 @@ public enum Permission {
     WORKER_READ("worker:read", "查看"),
     WORKER_UPDATE("worker:update", "修改"),
     WORKER_CREATE("worker:create", "新增"),
-    WORKER_DELETE("worker:delete", "删除");
+    WORKER_DELETE("worker:delete", "删除"),
+    FARMLAND_READ("farmland:read", "查看"),
+    FARMLAND_UPDATE("farmland:update", "修改"),
+    FARMLAND_CREATE("farmland:create", "新增"),
+    FARMLAND_DELETE("farmland:delete", "删除"),
+    LIVESTOCK_READ("livestock:read", "查看"),
+    LIVESTOCK_UPDATE("livestock:update", "修改"),
+    LIVESTOCK_CREATE("livestock:create", "新增"),
+    LIVESTOCK_DELETE("livestock:delete", "删除");
 
     private final String permission;
     private final String name;

@@ -6,6 +6,8 @@ import cn.perhome.snapha.dto.form.FormUserDto;
 import cn.perhome.snapha.entity.UserEntity;
 import cn.perhome.snapha.mapper.UserMapper;
 import cn.perhome.snapha.security.AuthUser;
+import cn.perhome.snapha.security.Role;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.mybatisflex.core.paginate.Page;
@@ -22,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static cn.perhome.snapha.entity.table.UserEntityTableDef.USER_ENTITY;
@@ -72,6 +75,18 @@ public class UserController {
         Long userId = authUser.getId();
         UserEntity entity = this.userMapper.selectOneById(userId);
         ResponseResultDto responseResultDto = ResponseResultDto.success(entity);
+        return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "role", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<ResponseResultDto> getAllRole(Authentication authentication) throws JsonProcessingException {
+
+        var role = new HashMap<String, Object>();
+        for(Role r : Role.values()) {
+            role.put(r.name(), r.getPermissions());
+        }
+        ResponseResultDto responseResultDto = ResponseResultDto.success(role);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 

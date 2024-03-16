@@ -10,5 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CfrProductServiceImpl extends ServiceImpl<CfrProductMapper, CfrProductEntity>
         implements CfrProductService {
+    public void cfrCreate() {
+
+    }
 }
 
