@@ -15,18 +15,38 @@
         WHERE t1.parent_wid = #{wid} AND t1.deleted = 0
     </select>
 
-    <select id="getTreeList" resultMap="BaseTreeResultMap" parameterType="long">
+    <select id="getTreeList" resultMap="BaseTreeResultMap" parameterType="cn.perhome.snapha.dto.query.QueryWorkspaceDto">
         SELECT
             t1.*
         FROM "workspace" t1
         WHERE t1.deleted = 0 AND t1.parent_wid = #{parentWid}
     </select>
 
+    <resultMap id="BaseStructTreeResultMap" type="cn.perhome.snapha.model.Workspace">
+        <result column="wid" property="wid"/>
+        <collection column="wid" property="children" javaType="java.util.ArrayList"
+                    ofType="cn.perhome.snapha.model.Workspace" select="getStructNextTreeList"/>
+    </resultMap>
+
+    <select id="getStructNextTreeList" resultMap="BaseStructTreeResultMap" parameterType="long">
+        SELECT
+            t1.name, t1.wid, t1.wsn
+        FROM "workspace" t1
+            WHERE t1.parent_wid = #{wid} AND t1.deleted = 0 AND t1.scheme = 0
+    </select>
+
+    <select id="getStructTreeList" resultMap="BaseStructTreeResultMap" parameterType="cn.perhome.snapha.dto.query.QueryWorkspaceDto">
+        SELECT
+            t1.name, t1.wid, t1.wsn
+        FROM "workspace" t1
+            WHERE t1.deleted = 0 AND t1.parent_wid = 0 AND t1.scheme = 0
+    </select>
+
     <select id="getLisByParentId" resultType="cn.perhome.snapha.model.Workspace" >
         SELECT t1.*
-        FROM "workspace" t1
+            FROM "workspace" t1
         WHERE t1.parent_wid = #{parentWid}
-        ORDER BY t1.wid DESC
+            ORDER BY t1.wid DESC
     </select>
 
     <insert id="snaphaCreate" parameterType="cn.perhome.snapha.entity.WorkspaceEntity">

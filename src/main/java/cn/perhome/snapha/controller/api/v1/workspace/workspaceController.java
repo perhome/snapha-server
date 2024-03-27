@@ -1,13 +1,14 @@
 package cn.perhome.snapha.controller.api.v1.workspace;
 
 
-import cn.perhome.snapha.dto.QueryDto;
 import cn.perhome.snapha.dto.ResponseResultDto;
 import cn.perhome.snapha.dto.form.FormWorkspaceDto;
+import cn.perhome.snapha.dto.query.QueryWorkspaceDto;
 import cn.perhome.snapha.entity.WorkspaceEntity;
 import cn.perhome.snapha.mapper.WorkspaceMapper;
 import cn.perhome.snapha.model.Workspace;
 import cn.perhome.snapha.service.WorkspaceService;
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,19 @@ public class workspaceController {
 
     private final WorkspaceService workspaceService;
     private final WorkspaceMapper workspaceMapper;
-    
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<ResponseResultDto> list(QueryWorkspaceDto query) {
+
+        QueryWrapper queryWrapper = QueryWrapper.create().select(WORKSPACE_ENTITY.ALL_COLUMNS)
+                .where(WORKSPACE_ENTITY.PARENT_WID.eq(query.getParentWid()).when(query.getParentWid() != null))
+                .orderBy(WORKSPACE_ENTITY.WEIGHT, false);
+        Page<WorkspaceEntity> pageRecords       = this.workspaceMapper.paginate(query.getCurrentPage(), query.getPageSize(), queryWrapper);
+        ResponseResultDto     responseResultDto = ResponseResultDto.success(pageRecords);
+        return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<ResponseResultDto> post(@RequestBody FormWorkspaceDto form) {
@@ -61,7 +74,7 @@ public class workspaceController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @RequestMapping(value = "{workspaceId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> delete(@PathVariable Integer workspaceId) {
+    public ResponseEntity<ResponseResultDto> delete(@PathVariable Long workspaceId) {
         boolean isSuccess = this.workspaceService.removeById(workspaceId);
         ResponseResultDto responseResultDto
                 = isSuccess? ResponseResultDto.success(isSuccess)
@@ -69,22 +82,20 @@ public class workspaceController {
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "tree", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> list(QueryDto query) {
+    public ResponseEntity<ResponseResultDto> treeList(QueryWorkspaceDto query) {
 
-        QueryWrapper queryWrapper = QueryWrapper.create().select(WORKSPACE_ENTITY.ALL_COLUMNS)
-                .orderBy(WORKSPACE_ENTITY.WEIGHT, false);
-        List<WorkspaceEntity> list  = this.workspaceService.list(queryWrapper);
-        ResponseResultDto  responseResultDto = ResponseResultDto.success(list);
+        List<Workspace> list = this.workspaceMapper.getTreeList(query);
+        ResponseResultDto responseResultDto = ResponseResultDto.success(list);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "tree", method = RequestMethod.GET)
+    @RequestMapping(value = "struct-tree", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> treeList(QueryDto query) {
+    public ResponseEntity<ResponseResultDto> structTreeList(QueryWorkspaceDto query) {
 
-        List<Workspace> list = this.workspaceMapper.getTreeList(0L);
+        List<Workspace> list = this.workspaceMapper.getStructTreeList(query);
         ResponseResultDto responseResultDto = ResponseResultDto.success(list);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }

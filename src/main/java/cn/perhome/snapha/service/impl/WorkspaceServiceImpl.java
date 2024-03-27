@@ -57,7 +57,7 @@ public class WorkspaceServiceImpl extends ServiceImpl<WorkspaceMapper, Workspace
         BeanUtils.copyProperties(form, entity);
 
         int  result    = this.workspaceMapper.insertSelective(entity);
-        if (entity.getWid() != null && !entity.getName().contains("@")) {
+        if (entity.getWid() != null && entity.getName().contains("@")) {
             this.workspaceMapper.updateIndexById(entity.getWid());
         }
         return result > 0 ? entity : null;
