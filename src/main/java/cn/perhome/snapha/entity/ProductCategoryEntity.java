@@ -16,6 +16,7 @@ public class ProductCategoryEntity implements Serializable {
   private String pcsn;
   private Long   parentPcid;
   private String workspaceAbbr;
+  private Integer deleted;
   private String nameSpell;
   private String nameAbbr;
 

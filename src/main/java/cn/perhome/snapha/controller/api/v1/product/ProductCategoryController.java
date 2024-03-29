@@ -3,7 +3,7 @@ package cn.perhome.snapha.controller.api.v1.product;
 
 import cn.perhome.snapha.dto.QueryDto;
 import cn.perhome.snapha.dto.ResponseResultDto;
-import cn.perhome.snapha.dto.form.FormGoodsCategoryDto;
+import cn.perhome.snapha.dto.form.FormProductCategoryDto;
 import cn.perhome.snapha.entity.ProductCategoryEntity;
 import cn.perhome.snapha.mapper.ProductCategoryMapper;
 import cn.perhome.snapha.model.GoodsCategory;
@@ -12,6 +12,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,10 +43,11 @@ public class ProductCategoryController {
         }
       
         if (form.getParentPcid() != 0) {
+            int nextId = this.productCategoryMapper.getNextId();
             ProductCategoryEntity parentEntity = this.productCategoryService.getById(form.getParentPcid());
             String              parentPcsn   = parentEntity.getPcsn();
-//            form.setPcsn(StringUtils.isNotBlank(parentPcsn)
-//                    ? String.format("%s-%d", parentPcsn, gcid) : String.valueOf(gcid));
+            form.setPcsn(StringUtils.isNotBlank(parentPcsn)
+                    ? String.format("%s-%d", parentPcsn, nextId) : String.valueOf(nextId));
         }
         boolean isSuccess = this.productCategoryService.save(form);
 
@@ -56,10 +58,10 @@ public class ProductCategoryController {
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('anager:update')")
+    @PreAuthorize("hasAuthority('admin:update')")
     @RequestMapping(value = "{productCategoryId}", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> put(@PathVariable Long productCategoryId, @RequestBody FormGoodsCategoryDto form) {
+    public ResponseEntity<ResponseResultDto> put(@PathVariable Long productCategoryId, @RequestBody FormProductCategoryDto form) {
 
         ProductCategoryEntity entity = new ProductCategoryEntity();
         BeanUtils.copyProperties(form, entity);
@@ -73,7 +75,7 @@ public class ProductCategoryController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @RequestMapping(value = "{productCategoryId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> delete(@PathVariable Integer productCategoryId) {
+    public ResponseEntity<ResponseResultDto> delete(@PathVariable Long productCategoryId) {
         boolean isSuccess = this.productCategoryService.removeById(productCategoryId);
         ResponseResultDto responseResultDto
                 = isSuccess ? ResponseResultDto.success(isSuccess)

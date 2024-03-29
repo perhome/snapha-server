@@ -1,11 +1,12 @@
 package cn.perhome.snapha.controller.api.v1.product;
 
-import cn.perhome.snapha.dto.QueryDto;
 import cn.perhome.snapha.dto.ResponseResultDto;
+import cn.perhome.snapha.dto.query.QueryProductDto;
 import cn.perhome.snapha.entity.ProductEntity;
 import cn.perhome.snapha.mapper.ProductMapper;
 import cn.perhome.snapha.service.ProductService;
 import cn.perhome.snapha.utils.SpellUtils;
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static cn.perhome.snapha.entity.table.ProductEntityTableDef.PRODUCT_ENTITY;
 
@@ -35,11 +34,13 @@ public class ProductController {
     @ResponseBody
     public ResponseEntity<ResponseResultDto> post(@RequestBody ProductEntity form) {
 
+        ProductEntity entity = new ProductEntity();
+        BeanUtils.copyProperties(form, entity);
+
         Long parentPid = form.getParentPid();
         if (parentPid == null) {
             form.setParentPid(0L);
         }
-
         form.setNameAbbr(SpellUtils.abbr(form.getName()));
         form.setNameSpell(SpellUtils.spell(form.getName()));
 
@@ -59,10 +60,8 @@ public class ProductController {
         ProductEntity entity = new ProductEntity();
         BeanUtils.copyProperties(form, entity);
         entity.setPid(productId);
-
         entity.setNameAbbr(SpellUtils.abbr(form.getName()));
         entity.setNameSpell(SpellUtils.spell(form.getName()));
-
         boolean isSuccess = this.productService.saveOrUpdate(entity);
         ResponseResultDto responseResultDto = ResponseResultDto.success(isSuccess);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
@@ -71,7 +70,7 @@ public class ProductController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @RequestMapping(value = "{productId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> delete(@PathVariable Integer productId) {
+    public ResponseEntity<ResponseResultDto> delete(@PathVariable Long productId) {
 
         boolean isSuccess = this.productService.removeById(productId);
         ResponseResultDto responseResultDto
@@ -82,11 +81,15 @@ public class ProductController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> list(QueryDto query) {
+    public ResponseEntity<ResponseResultDto> getList(QueryProductDto query) {
+
         QueryWrapper queryWrapper = QueryWrapper.create().select(PRODUCT_ENTITY.ALL_COLUMNS)
+                .where(PRODUCT_ENTITY.PID.eq(query.getPid()).when(query.getPid() != null))
+                .where(PRODUCT_ENTITY.CATEGORY_ID.eq(query.getCategoryId()).when(query.getCategoryId() != null))
+                .where(PRODUCT_ENTITY.NAME_ABBR.eq(query.getNameAbbr()).when(query.getNameAbbr() != null))
                 .orderBy(PRODUCT_ENTITY.WEIGHT, false);
-        List<ProductEntity> list              = this.productService.list(queryWrapper);
-        ResponseResultDto         responseResultDto = ResponseResultDto.success(list);
+        Page<ProductEntity> pageList = this.productMapper.paginate(query.getCurrentPage(), query.getPageSize(), queryWrapper);
+        ResponseResultDto   responseResultDto = ResponseResultDto.success(pageList);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 

@@ -13,10 +13,12 @@ public class  QueryDto {
     private int     currentPage = 1;
     private int     pageSize    = 10;
     private long    totalRow    = 0L;
-    private Long    id;
     private Long    userId;
     private Integer deleted;
     private String  keyword;
+    private String  name;
+    private String  nameAbbr;
+    private String  nameSpell;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date    startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

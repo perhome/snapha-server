@@ -4,7 +4,7 @@
 
     <resultMap id="BaseTreeResultMap" type="cn.perhome.snapha.model.ProductCategory">
         <result column="pcid" property="pcid"/>
-        <collection column="gcid" property="children" javaType="java.util.ArrayList"
+        <collection column="pcid" property="children" javaType="java.util.ArrayList"
                     ofType="cn.perhome.snapha.model.ProductCategory" select="getNextTreeList"/>
     </resultMap>
 
