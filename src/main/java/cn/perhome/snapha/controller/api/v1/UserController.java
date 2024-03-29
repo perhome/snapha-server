@@ -3,10 +3,12 @@ package cn.perhome.snapha.controller.api.v1;
 import cn.perhome.snapha.dto.QueryDto;
 import cn.perhome.snapha.dto.ResponseResultDto;
 import cn.perhome.snapha.dto.form.FormUserDto;
+import cn.perhome.snapha.dto.query.QueryUserDto;
 import cn.perhome.snapha.entity.UserEntity;
 import cn.perhome.snapha.mapper.UserMapper;
 import cn.perhome.snapha.security.AuthUser;
 import cn.perhome.snapha.security.Role;
+import cn.perhome.snapha.service.impl.UserServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -37,7 +39,23 @@ import static cn.perhome.snapha.entity.table.UserEntityTableDef.USER_ENTITY;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserMapper userMapper;
+    private final UserMapper      userMapper;
+    private final UserServiceImpl userServiceImpl;
+
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<ResponseResultDto> post(@RequestBody FormUserDto form) {
+
+        String passport = form.getUsn();
+        UserEntity userEntity = this.userMapper.getByPassport(passport);
+        if (userEntity != null) {
+            ResponseResultDto responseResultDto = ResponseResultDto.failed(403,"用户账户已存在", form);
+            return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
+        }
+
+        ResponseResultDto responseResultDto = this.userServiceImpl.snaphaRegister(form);
+        return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
+    }
 
     @Operation(summary = "认证注销登陆信息")
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -52,8 +70,11 @@ public class UserController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> list(QueryDto query) {
+    public ResponseEntity<ResponseResultDto> list(QueryUserDto query) {
         QueryWrapper queryWrapper = QueryWrapper.create().select(USER_ENTITY.ALL_COLUMNS)
+                .where(USER_ENTITY.UID.eq(query.getUid()).when(query.getUid() != null))
+                .where(USER_ENTITY.USN.eq(query.getUsn()).when(query.getUsn() != null))
+                .where(USER_ENTITY.NAME.eq(query.getName()).when(query.getName() != null))
                 .orderBy(USER_ENTITY.CREATED, false);
         Page<UserEntity> list;
         long totalRow = query.getTotalRow();
@@ -67,6 +88,15 @@ public class UserController {
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('admin:delete')")
+    @RequestMapping(value = "{userId:\\d+}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity<ResponseResultDto> delete(Authentication authentication, @PathVariable Long userId) {
+        var authUser = (AuthUser)authentication.getPrincipal();
+        int isSuccess = this.userMapper.deleteById(userId);
+        ResponseResultDto responseResultDto = ResponseResultDto.success(isSuccess);
+        return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "info", method = RequestMethod.GET)
     @ResponseBody
@@ -99,8 +129,9 @@ public class UserController {
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('admin:read')")
     @Transactional(rollbackFor = Exception.class)
-    @RequestMapping(value = "{userId}", method = RequestMethod.POST)
+    @RequestMapping(value = "{userId}", method = RequestMethod.PUT)
     @ResponseBody
     public ResponseEntity<ResponseResultDto> updateInfoById(@PathVariable Long userId
             , @RequestBody FormUserDto form) {

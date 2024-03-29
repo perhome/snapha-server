@@ -25,6 +25,16 @@ public class UserGroupController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
+    public ResponseEntity<ResponseResultDto> get(@RequestBody FormUserGroupDto form) {
+        boolean isSuccess = this.userGroupService.save(form);
+        ResponseResultDto responseResultDto
+                = isSuccess? ResponseResultDto.success(isSuccess)
+                : ResponseResultDto.failed(500, "failed to save");
+        return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    @ResponseBody
     public ResponseEntity<ResponseResultDto> post(@RequestBody FormUserGroupDto form) {
         boolean isSuccess = this.userGroupService.save(form);
         ResponseResultDto responseResultDto

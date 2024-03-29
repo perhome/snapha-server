@@ -14,7 +14,7 @@ public interface GroupMapper extends BaseMapper<GroupEntity> {
     @Select("SELECT nextval('group_gid_seq')")
     int getNextId();
 
-    List<GoodsCategory> getTreeList(@Param("parentGid") Integer parentGid);
+    List<GoodsCategory> getTreeList(Long parentGid);
 
 
 }

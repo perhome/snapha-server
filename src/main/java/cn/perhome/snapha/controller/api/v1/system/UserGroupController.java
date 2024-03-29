@@ -36,14 +36,14 @@ public class UserGroupController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<ResponseResultDto> post(@RequestBody FormGroupDto form) {
-        Integer parentGid = form.getParentGid();
+        Long parentGid = form.getParentGid();
         if (parentGid == null) {
-            form.setParentGid(0);
+            form.setParentGid(0L);
         }
         Integer gcid = this.groupMapper.getNextId();
         if (form.getParentGid() != 0){
             GroupEntity parentEntity = this.groupService.getById(form.getParentGid());
-            String              parentGcsn   = parentEntity.getGsn();
+            String      parentGcsn   = parentEntity.getGsn();
             form.setGsn(StringUtils.isNotBlank(parentGcsn)
                     ? String.format("%s-%d", parentGcsn, gcid):String.valueOf(gcid));
         }
@@ -58,7 +58,7 @@ public class UserGroupController {
 
     @RequestMapping(value = "{groupId}", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> put(@PathVariable Integer groupId, @RequestBody FormGroupDto form) {
+    public ResponseEntity<ResponseResultDto> put(@PathVariable Long groupId, @RequestBody FormGroupDto form) {
 
         GroupEntity entity = new GroupEntity();
         BeanUtils.copyProperties(form, entity);
@@ -74,7 +74,7 @@ public class UserGroupController {
     @PreAuthorize("hasAuthority('admin:delete')")
     @RequestMapping(value = "{groupId}", method = RequestMethod.DELETE)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> delete(@PathVariable Integer groupId) {
+    public ResponseEntity<ResponseResultDto> delete(@PathVariable Long groupId) {
         boolean isSuccess = this.groupService.removeById(groupId);
         ResponseResultDto responseResultDto
                 = isSuccess? ResponseResultDto.success(isSuccess)
@@ -96,7 +96,7 @@ public class UserGroupController {
     @ResponseBody
     public ResponseEntity<ResponseResultDto> treeList(QueryDto query) {
 
-        List<GoodsCategory> list              = this.groupMapper.getTreeList(0);
+        List<GoodsCategory> list              = this.groupMapper.getTreeList(0L);
         ResponseResultDto   responseResultDto = ResponseResultDto.success(list);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }

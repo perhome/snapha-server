@@ -18,30 +18,31 @@ import java.io.Serializable;
 @Table(value = "user")
 public class UserEntity implements Serializable {
     @Id
-    private Long      uid;
-    private String    usn;
-    private String    name;
+    private Long           uid;
+    private String         usn;
+    private String         name;
     @Enumerated(EnumType.STRING)
-    private String    nameAbbr;
-    private String    nameSpell;
-    private Integer        jobId;
-    private Integer        departmentId;
+    private String         nameAbbr;
+    private String         nameSpell;
+    private Long        jobId;
+    private Long        departmentId;
     private String         jobName;
     private String         groupName;
-    private Integer        groupId;
+    private Long        groupId;
     private String         jobType;
-    private String    sex;
+    private String         sex;
     @Column(typeHandler = ArrayTypeHandler.class)
-    private String[] roles;
+    private String[]       roles;
     @JsonIgnore
-    private String    password;
+    private String         password;
+    private String         presetPassword;
     private Integer        status;
     private Integer        deleted;
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private java.util.Date workStartDate;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private  java.util.Date lastLogin;
-    private String lastLoginIp;
+    private java.util.Date lastLogin;
+    private String         lastLoginIp;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private java.util.Date created;
     private Boolean        isActive = false;

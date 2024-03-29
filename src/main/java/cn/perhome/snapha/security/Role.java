@@ -51,7 +51,7 @@ public enum Role {
             FARMLAND_DELETE,
             FARMLAND_CREATE
             )
-            , "种植区"
+            , "种植"
     )
     ,
     LIVESTOCK(
@@ -61,7 +61,17 @@ public enum Role {
             LIVESTOCK_DELETE,
             LIVESTOCK_CREATE
             )
-            , "养殖区"
+            , "养殖"
+    )
+    ,
+    WAREHOUSE(
+            Set.of(
+                    WAREHOUSE_READ,
+                    WAREHOUSE_UPDATE,
+                    WAREHOUSE_DELETE,
+                    WAREHOUSE_CREATE
+            )
+            , "仓库"
     )
     ;
 

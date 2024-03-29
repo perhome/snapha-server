@@ -9,14 +9,14 @@
                     ofType="cn.perhome.snapha.model.Group" select="getNextTreeList"/>
     </resultMap>
 
-    <select id="getNextTreeList" resultMap="BaseTreeResultMap" parameterType="integer">
+    <select id="getNextTreeList" resultMap="BaseTreeResultMap" parameterType="long">
         SELECT
             t1.name, t1.gsn, t1.gid, t1.parent_gid
         FROM "group" t1
         WHERE t1.parent_gid = #{gid} AND t1.deleted = 0
     </select>
 
-    <select id="getTreeList" resultMap="BaseTreeResultMap" parameterType="integer">
+    <select id="getTreeList" resultMap="BaseTreeResultMap" parameterType="long">
         SELECT
             t1.name, t1.gsn, t1.gid, t1.parent_gid
         FROM "group" t1

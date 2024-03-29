@@ -26,7 +26,12 @@ public enum Permission {
     LIVESTOCK_READ("livestock:read", "查看"),
     LIVESTOCK_UPDATE("livestock:update", "修改"),
     LIVESTOCK_CREATE("livestock:create", "新增"),
-    LIVESTOCK_DELETE("livestock:delete", "删除");
+    LIVESTOCK_DELETE("livestock:delete", "删除"),
+    WAREHOUSE_READ("warehouse:read", "查看"),
+    WAREHOUSE_UPDATE("warehouse:update", "修改"),
+    WAREHOUSE_DELETE("warehouse:create", "新增"),
+    WAREHOUSE_CREATE("warehouse:delete", "删除")
+    ;
 
     private final String permission;
     private final String name;

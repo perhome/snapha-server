@@ -4,6 +4,7 @@ import cn.perhome.snapha.component.MyUserInsertListener;
 import cn.perhome.snapha.dto.ResponseResultDto;
 import cn.perhome.snapha.dto.form.FormLoginDto;
 import cn.perhome.snapha.dto.form.FormRegisterDto;
+import cn.perhome.snapha.dto.form.FormUserDto;
 import cn.perhome.snapha.entity.UserEntity;
 import cn.perhome.snapha.mapper.UserMapper;
 import cn.perhome.snapha.security.*;
@@ -14,6 +15,7 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +56,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public ResponseResultDto snaphaRegister(FormUserDto form) {
+        UserEntity userEntity = new UserEntity();
+        BeanUtils.copyProperties(form, userEntity);
+        userEntity.setPassword(form.getPresetPassword());
+        userEntity.setRoles(form.getRoles());
+        int result = this.userMapper.insertSelective(userEntity);
+        return ResponseResultDto.success(result);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public ResponseResultDto login(FormLoginDto formLoginDto) {
         ResponseResultDto responseResultDto;
         String passport = formLoginDto.getPassport();
@@ -83,7 +96,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserEntity>
         entity.setLastLogin(DateUtils.getNowDate());
         entity.setLastLoginIp(request.getRemoteAddr());
         this.userMapper.update(entity);
-
 
         Set<Role> setRoles = Arrays.stream(userEntity.getRoles())
                 .map(Role::valueOf)
