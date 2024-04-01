@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Table("goods_category")
 public class GoodsCategoryEntity implements Serializable {
     @Id
-    private Integer gcid;
+    private Long    gcid;
     private String  name;
     private String  nameAbbr;
     private String  gcsn;
@@ -18,5 +18,5 @@ public class GoodsCategoryEntity implements Serializable {
     private Integer deleted;
     private Integer status;
     private String  nameSpell;
-    private Integer parentGcid;
+    private Long    parentGcid;
 }

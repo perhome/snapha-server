@@ -60,8 +60,10 @@ public class ProductController {
         ProductEntity entity = new ProductEntity();
         BeanUtils.copyProperties(form, entity);
         entity.setPid(productId);
-        entity.setNameAbbr(SpellUtils.abbr(form.getName()));
-        entity.setNameSpell(SpellUtils.spell(form.getName()));
+        if (form.getName() != null) {
+            entity.setNameAbbr(SpellUtils.abbr(form.getName()));
+            entity.setNameSpell(SpellUtils.spell(form.getName()));
+        }
         boolean isSuccess = this.productService.saveOrUpdate(entity);
         ResponseResultDto responseResultDto = ResponseResultDto.success(isSuccess);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
@@ -85,6 +87,8 @@ public class ProductController {
 
         QueryWrapper queryWrapper = QueryWrapper.create().select(PRODUCT_ENTITY.ALL_COLUMNS)
                 .where(PRODUCT_ENTITY.PID.eq(query.getPid()).when(query.getPid() != null))
+                .where(PRODUCT_ENTITY.PSN.eq(query.getPsn()).when(query.getPsn() != null))
+                .where(PRODUCT_ENTITY.DELETED.eq(query.getDeleted()).when(query.getDeleted() != null))
                 .where(PRODUCT_ENTITY.CATEGORY_ID.eq(query.getCategoryId()).when(query.getCategoryId() != null))
                 .where(PRODUCT_ENTITY.NAME_ABBR.eq(query.getNameAbbr()).when(query.getNameAbbr() != null))
                 .orderBy(PRODUCT_ENTITY.WEIGHT, false);

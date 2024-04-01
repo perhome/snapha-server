@@ -19,7 +19,7 @@ public class ProductEntity implements Serializable {
   private String   nameAbbr;
   private String   nameSpell;
   private Long     categoryId;
-  private Integer  unitId;
+  private Long     unitId;
   private String   workspaceAbbr;
   private Long     parentPid;
   private Integer  weight;

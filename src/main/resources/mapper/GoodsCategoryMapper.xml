@@ -9,14 +9,14 @@
                     ofType="cn.perhome.snapha.model.GoodsCategory" select="getNextTreeList"/>
     </resultMap>
 
-    <select id="getNextTreeList" resultMap="BaseTreeResultMap" parameterType="integer">
+    <select id="getNextTreeList" resultMap="BaseTreeResultMap" parameterType="long">
         SELECT
             t1.name, t1.gcsn, t1.gcid, t1.parent_gcid
         FROM "goods_category" t1
             WHERE t1.parent_gcid = #{gcid} AND t1.deleted = 0
     </select>
 
-    <select id="getTreeList" resultMap="BaseTreeResultMap" parameterType="integer">
+    <select id="getTreeList" resultMap="BaseTreeResultMap" parameterType="long">
         SELECT
             t1.name, t1.gcsn, t1.gcid, t1.parent_gcid
         FROM "goods_category" t1

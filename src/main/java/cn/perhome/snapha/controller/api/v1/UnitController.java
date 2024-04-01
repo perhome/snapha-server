@@ -6,6 +6,8 @@ import cn.perhome.snapha.dto.form.FormUnitDto;
 import cn.perhome.snapha.entity.UnitEntity;
 import cn.perhome.snapha.mapper.UnitMapper;
 import cn.perhome.snapha.service.UnitService;
+import cn.perhome.snapha.utils.SpellUtils;
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,12 +44,11 @@ public class UnitController {
         if (count > 0) {
             return new ResponseEntity<>(ResponseResultDto.failed(403, "单位已存在"), HttpStatus.OK);
         }
-//        try {
-//            log.info("form => {}", JsonUtils.generate(form));
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-        boolean isSuccess = this.unitService.save(form);
+
+        UnitEntity entity = new UnitEntity();
+        BeanUtils.copyProperties(form, entity);
+        entity.setNameAbbr(SpellUtils.abbr(form.getName()));
+        boolean isSuccess = this.unitService.save(entity);
         ResponseResultDto responseResultDto;
         if (isSuccess) {
             responseResultDto = ResponseResultDto.success(form);
@@ -66,7 +67,7 @@ public class UnitController {
 
         BeanUtils.copyProperties(form, entity);
         entity.setUid(unitId);
-
+        entity.setNameAbbr(SpellUtils.abbr(form.getName()));
         boolean isSuccess = this.unitService.saveOrUpdate(entity);
 
         ResponseResultDto responseResultDto = ResponseResultDto.success(isSuccess);
@@ -83,13 +84,30 @@ public class UnitController {
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "list", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<ResponseResultDto> getAllList(QueryDto query) {
+
+        QueryWrapper queryWrapper = QueryWrapper.create().select(UNIT_ENTITY.ALL_COLUMNS)
+                .where(UNIT_ENTITY.DELETED.eq(0))
+                .orderBy(UNIT_ENTITY.NAME_ABBR, false)
+                .orderBy(UNIT_ENTITY.WEIGHT, false)
+                ;
+        List<UnitEntity> list = this.unitService.list(queryWrapper);
+        ResponseResultDto responseResultDto = ResponseResultDto.success(list);
+        return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<ResponseResultDto> list(QueryDto query) {
-//        QueryCondition queryCondition = QueryCondition.create(UNIT_ENTITY.DELETED, 0);
+    public ResponseEntity<ResponseResultDto> get(QueryDto query) {
+
         QueryWrapper queryWrapper = QueryWrapper.create().select(UNIT_ENTITY.ALL_COLUMNS)
-                .orderBy(UNIT_ENTITY.WEIGHT, false);
-        List<UnitEntity> list = this.unitService.list(queryWrapper);
+                .orderBy(UNIT_ENTITY.NAME_ABBR, false)
+                .orderBy(UNIT_ENTITY.WEIGHT, false)
+                ;
+        Page<UnitEntity>  list
+                = this.unitMapper.paginate(query.getCurrentPage(), query.getPageSize(), queryWrapper);
         ResponseResultDto responseResultDto = ResponseResultDto.success(list);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);
     }

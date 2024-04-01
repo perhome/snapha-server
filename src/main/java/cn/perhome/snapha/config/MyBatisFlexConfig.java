@@ -4,6 +4,7 @@ package cn.perhome.snapha.config;
 import cn.perhome.snapha.component.MyUserInsertListener;
 import cn.perhome.snapha.entity.UserEntity;
 import com.mybatisflex.core.FlexGlobalConfig;
+import com.mybatisflex.core.audit.AuditManager;
 import com.mybatisflex.spring.boot.MyBatisFlexCustomizer;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -21,14 +22,14 @@ public class MyBatisFlexConfig implements MyBatisFlexCustomizer {
     public MyBatisFlexConfig(MyUserInsertListener myUserInsertListener) {
 
         this.myUserInsertListener = myUserInsertListener;
-//        AuditManager.setAuditEnable(true);
-//        //设置 SQL 审计收集器
-//        AuditManager.setMessageCollector(auditMessage ->
-//                logger.info("{}, {}, {}, {}ms", auditMessage.getHostIp()
-//                        , auditMessage.getModule()
-//                        , auditMessage.getFullSql()
-//                        , auditMessage.getElapsedTime())
-//        );
+        AuditManager.setAuditEnable(true);
+        //设置 SQL 审计收集器
+        AuditManager.setMessageCollector(auditMessage ->
+                logger.info("{}, {}, {}, {}ms", auditMessage.getHostIp()
+                        , auditMessage.getModule()
+                        , auditMessage.getFullSql()
+                        , auditMessage.getElapsedTime())
+        );
     }
 
     @Override
