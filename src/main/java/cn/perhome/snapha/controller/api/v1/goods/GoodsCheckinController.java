@@ -53,7 +53,7 @@ public class GoodsCheckinController {
     public ResponseEntity<ResponseResultDto> put(@PathVariable Long GoodsCheckinId, @RequestBody GoodsCheckin form) {
 
         GoodsCheckin entity = new GoodsCheckin();
-        BeanUtils.copyProperties(form, entity);
+        BeanUtils.copyProperties(form, entity, new String[]{"name"});
         entity.setGcid(GoodsCheckinId);
 
         boolean isSuccess = this.goodsCheckinService.saveOrUpdate(entity);

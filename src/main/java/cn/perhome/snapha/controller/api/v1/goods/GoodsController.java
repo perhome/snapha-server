@@ -11,6 +11,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,12 +40,10 @@ public class GoodsController {
         GoodsEntity entity = new GoodsEntity();
         BeanUtils.copyProperties(form, entity);
 
-
         form.setNameAbbr(SpellUtils.abbr(form.getName()));
         form.setNameSpell(SpellUtils.spell(form.getName()));
 
         boolean isSuccess = this.goodsService.save(form);
-
         ResponseResultDto responseResultDto
                 = isSuccess? ResponseResultDto.success(isSuccess)
                 : ResponseResultDto.failed(500, "failed to save");
@@ -93,7 +92,7 @@ public class GoodsController {
                         .or(GOODS_ENTITY.NAME_ABBR.likeLeft(query.getKeyword()))
                         .or(GOODS_ENTITY.NAME_SPELL.likeLeft(query.getKeyword()))
                         .or(GOODS_ENTITY.GSN.eq(query.getKeyword()))
-                        .or(GOODS_ENTITY.GID.eq(Long.valueOf(query.getKeyword())))
+                        .or(GOODS_ENTITY.GID.eq(StringUtils.isNumeric(query.getKeyword())?Long.parseLong(query.getKeyword()):0L).when(StringUtils.isNumeric(query.getKeyword())))
                 )
                 .or(GOODS_ENTITY.DELETED.eq(query.getDeleted()).when(query.getDeleted() != null))
                 .or(GOODS_ENTITY.GOODS_CATEGORY_ID.eq(query.getGoodsCategoryId()).when(query.getGoodsCategoryId() != null))
