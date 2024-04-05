@@ -83,6 +83,7 @@ public class WorkstageController {
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .select(WORKSTAGE_ENTITY.ALL_COLUMNS)
                 .where(WORKSTAGE_ENTITY.WID.eq(query.getWid()).when(query.getWid() != null))
+                .orderBy(WORKSTAGE_ENTITY.WID, false)
                 .orderBy(WORKSTAGE_ENTITY.WEIGHT, false);
         Page<WorkstageEntity> pageList = this.workstageMapper.paginate(query.getCurrentPage(), query.getPageSize(), queryWrapper);
         ResponseResultDto   responseResultDto = ResponseResultDto.success(pageList);

@@ -5,14 +5,17 @@ import cn.perhome.snapha.entity.WorkspaceEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class FromCfrProductDto extends CfrProductEntity {
+public class FormCfrProductDto extends CfrProductEntity {
 
-    private List<WorkspaceEntity> workspace;
+    @NonNull
+    private List<Long> workspaceIds;
+    private List<WorkspaceEntity> workspaceList;
 
 }

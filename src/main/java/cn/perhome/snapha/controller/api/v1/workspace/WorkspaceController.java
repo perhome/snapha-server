@@ -9,6 +9,7 @@ import cn.perhome.snapha.mapper.WorkspaceMapper;
 import cn.perhome.snapha.model.Workspace;
 import cn.perhome.snapha.service.WorkspaceService;
 import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryCondition;
 import com.mybatisflex.core.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ import static cn.perhome.snapha.entity.table.WorkspaceEntityTableDef.WORKSPACE_E
 @RestController
 @RequestMapping("/api/v1/workspace")
 @RequiredArgsConstructor
-public class workspaceController {
+public class WorkspaceController {
 
     private final WorkspaceService workspaceService;
     private final WorkspaceMapper workspaceMapper;
@@ -85,7 +86,15 @@ public class workspaceController {
     @RequestMapping(value = "tree", method = RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<ResponseResultDto> treeList(QueryWorkspaceDto query) {
-
+        String parentSn = query.getParentSn();
+        if (parentSn != null) {
+            WorkspaceEntity workstageEntity
+                    = this.workspaceMapper.selectOneByCondition(QueryCondition.create(WORKSPACE_ENTITY.WSN, parentSn));
+            query.setParentWid(workstageEntity.getWid());
+        }
+        else {
+            query.setParentWid(0L);
+        }
         List<Workspace> list = this.workspaceMapper.getTreeList(query);
         ResponseResultDto responseResultDto = ResponseResultDto.success(list);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);

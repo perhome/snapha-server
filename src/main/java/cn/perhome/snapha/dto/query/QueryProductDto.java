@@ -11,6 +11,7 @@ public class QueryProductDto extends QueryDto {
     private Long   pid;
     private String name;
     private String psn;
+    private String workspaceSn;
     private Long categoryId;
 }
 

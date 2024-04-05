@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.function.Consumer;
+
 import static cn.perhome.snapha.entity.table.ProductEntityTableDef.PRODUCT_ENTITY;
 
 @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
@@ -87,11 +89,20 @@ public class ProductController {
 
         QueryWrapper queryWrapper = QueryWrapper.create().select(PRODUCT_ENTITY.ALL_COLUMNS)
                 .where(PRODUCT_ENTITY.PID.eq(query.getPid()).when(query.getPid() != null))
-                .where(PRODUCT_ENTITY.PSN.eq(query.getPsn()).when(query.getPsn() != null))
-                .where(PRODUCT_ENTITY.DELETED.eq(query.getDeleted()).when(query.getDeleted() != null))
-                .where(PRODUCT_ENTITY.CATEGORY_ID.eq(query.getCategoryId()).when(query.getCategoryId() != null))
-                .where(PRODUCT_ENTITY.NAME_ABBR.eq(query.getNameAbbr()).when(query.getNameAbbr() != null))
+                .and(PRODUCT_ENTITY.PSN.eq(query.getPsn()).when(query.getPsn() != null))
+                .and(PRODUCT_ENTITY.WORKSPACE_SN.eq(query.getWorkspaceSn()).when(query.getWorkspaceSn() != null))
+                .and(PRODUCT_ENTITY.DELETED.eq(query.getDeleted()).when(query.getDeleted() != null))
+                .and(PRODUCT_ENTITY.CATEGORY_ID.eq(query.getCategoryId()).when(query.getCategoryId() != null))
+                .and(PRODUCT_ENTITY.NAME_ABBR.eq(query.getNameAbbr()).when(query.getNameAbbr() != null))
                 .orderBy(PRODUCT_ENTITY.WEIGHT, false);
+        if (query.getKeyword() != null) {
+            queryWrapper.and((Consumer<QueryWrapper>) wrapper -> wrapper
+                    .or(PRODUCT_ENTITY.NAME.likeLeft(query.getKeyword()))
+                    .or(PRODUCT_ENTITY.NAME_ABBR.likeLeft(query.getKeyword()))
+                    .or(PRODUCT_ENTITY.NAME_SPELL.likeLeft(query.getKeyword()))
+                    .or(PRODUCT_ENTITY.PSN.eq(query.getKeyword()))
+            );
+        }
         Page<ProductEntity> pageList = this.productMapper.paginate(query.getCurrentPage(), query.getPageSize(), queryWrapper);
         ResponseResultDto   responseResultDto = ResponseResultDto.success(pageList);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);

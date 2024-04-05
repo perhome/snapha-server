@@ -20,7 +20,7 @@ public class ProductEntity implements Serializable {
   private String   nameSpell;
   private Long     categoryId;
   private Long     unitId;
-  private String   workspaceAbbr;
+  private String   workspaceSn;
   private Long     parentPid;
   private Integer  weight;
   private Integer  status;

@@ -2,5 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.perhome.snapha.mapper.CfrWorkspaceMapper">
 
+    <select id="getList" resultType="cn.perhome.snapha.model.CfrWorkspace" parameterType="cn.perhome.snapha.dto.query.QueryCfrWorkspaceDto">
+        SELECT t1.*, t3.name AS product_name, t4.name AS workspace_name
+            FROM "cfr_workspace" t1
+            LEFT JOIN "cfr_product" t2 ON t2.cpid = t1.cfr_product_id
+            LEFT JOIN "product" t3 ON t2.product_id = t3.pid
+            LEFT JOIN "workspace" t4 ON t1.workspace_id = t4.wid
+        <where>
+            <if test="productId !=null">AND t2.product_id=#{productId}</if>
+            <if test="workspaceId !=null">AND t1.workspace_id=#{workspaceId}</if>
+            <if test="parentWorkspaceId !=null">AND t4.parent_wid=#{parentWorkspaceId}</if>
+            <if test="startDate !=null">AND t1.real_start_date &gt;= #{startDate}</if>
+            <if test="endDate !=null">AND t1.real_start_date &lt;= #{endDate}</if>
+        </where>
+            ORDER BY t1.real_start_date DESC
+    </select>
 
 </mapper>

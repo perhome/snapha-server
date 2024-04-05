@@ -86,18 +86,21 @@ public class GoodsController {
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .select(GOODS_ENTITY.ALL_COLUMNS)
                 .where(GOODS_ENTITY.GID.eq(query.getGid()).when(query.getGid() != null))
-                .or(GOODS_ENTITY.GSN.eq(query.getGsn()).when(query.getGsn() != null))
-                .and((Consumer<QueryWrapper>) wrapper -> wrapper
-                        .or(GOODS_ENTITY.NAME.likeLeft(query.getKeyword()))
-                        .or(GOODS_ENTITY.NAME_ABBR.likeLeft(query.getKeyword()))
-                        .or(GOODS_ENTITY.NAME_SPELL.likeLeft(query.getKeyword()))
-                        .or(GOODS_ENTITY.GSN.eq(query.getKeyword()))
-                        .or(GOODS_ENTITY.GID.eq(StringUtils.isNumeric(query.getKeyword())?Long.parseLong(query.getKeyword()):0L).when(StringUtils.isNumeric(query.getKeyword())))
-                )
-                .or(GOODS_ENTITY.DELETED.eq(query.getDeleted()).when(query.getDeleted() != null))
-                .or(GOODS_ENTITY.GOODS_CATEGORY_ID.eq(query.getGoodsCategoryId()).when(query.getGoodsCategoryId() != null))
-                .or(GOODS_ENTITY.NAME_ABBR.eq(query.getNameAbbr()).when(query.getNameAbbr() != null))
+                .and(GOODS_ENTITY.GSN.eq(query.getGsn()).when(query.getGsn() != null))
+                .and(GOODS_ENTITY.DELETED.eq(query.getDeleted()).when(query.getDeleted() != null))
+                .and(GOODS_ENTITY.GOODS_CATEGORY_ID.eq(query.getGoodsCategoryId()).when(query.getGoodsCategoryId() != null))
+                .and(GOODS_ENTITY.NAME_ABBR.eq(query.getNameAbbr()).when(query.getNameAbbr() != null))
                 .orderBy(GOODS_ENTITY.WEIGHT, false);
+        if (query.getKeyword() != null) {
+            queryWrapper.and(
+                    (Consumer<QueryWrapper>) wrapper -> wrapper
+                    .or(GOODS_ENTITY.NAME.likeLeft(query.getKeyword()))
+                    .or(GOODS_ENTITY.NAME_ABBR.likeLeft(query.getKeyword()))
+                    .or(GOODS_ENTITY.NAME_SPELL.likeLeft(query.getKeyword()))
+                    .or(GOODS_ENTITY.GSN.eq(query.getKeyword()))
+                    .or(GOODS_ENTITY.GID.eq(StringUtils.isNumeric(query.getKeyword())?Long.parseLong(query.getKeyword()):0L).when(StringUtils.isNumeric(query.getKeyword())))
+            );
+        }
         Page<GoodsEntity> pageList = this.goodsMapper.paginate(query.getCurrentPage(), query.getPageSize(), queryWrapper);
         ResponseResultDto   responseResultDto = ResponseResultDto.success(pageList);
         return new ResponseEntity<>(responseResultDto, HttpStatus.OK);

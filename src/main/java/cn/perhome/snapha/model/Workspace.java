@@ -10,5 +10,6 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Workspace extends WorkspaceEntity {
+    private Long id;
     private List<Workspace> children;
 }

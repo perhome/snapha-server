@@ -10,5 +10,6 @@ public class QueryWorkspaceDto extends QueryDto {
 
     private Long    parentWid;
     private Integer scheme;
+    private String  parentSn;
 }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 
@@ -20,20 +21,26 @@ public class CfrProductEntity implements Serializable {
   private Double         yield;
   private Double         areaYield;
   private String         category;
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private java.util.Date startDate;
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private java.util.Date endDate;
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private java.util.Date harvestDate;
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private java.util.Date realStartDate;
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private java.util.Date realEndDate;
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
   private java.util.Date realHarvestDate;
   private Integer        status;
-  private Integer        userId;
+  private Long        userId;
   private Integer        deleted;
 
 }

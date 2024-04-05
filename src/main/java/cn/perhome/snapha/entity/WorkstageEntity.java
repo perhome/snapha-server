@@ -24,7 +24,7 @@ public class WorkstageEntity implements Serializable {
   private Integer  weight;
   private Integer  deleted;
   private Integer  status;
-  private String   workspaceSn;
+  private Long     workspaceId;
   private String   remark;
   @Column(typeHandler = JsonTypeHandler.class)
   private JsonNode goods;
